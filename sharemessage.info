@@ -1,0 +1,10 @@
+name = Shareessage
+description = New Sharing Module.
+core = 7.x
+
+dependencies[] = entity
+
+files[] = includes/sharemessage.entity.inc
+files[] = includes/sharemessage.info.inc
+files[] = includes/sharemessage.ui.inc
+files[] = tests/sharemessage.test
