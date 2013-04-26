@@ -271,3 +271,30 @@ function sharemessage_uninstall() {
   field_delete_field('sharemessage_image_url');
   field_delete_field('sharemessage_url');
 }
+
+/**
+ * Change the tweet service to twitter.
+ */
+function sharemessage_update_7000() {
+  // Change the default settings.
+  $services = variable_get('sharemessage_default_services', array());
+  if (!empty($services['tweet'])) {
+    unset($services['tweet']);
+    $services['twitter'] = 'twitter';
+    variable_set('sharemessage_default_services', $services);
+  }
+
+  // Look for overriden settings.
+  $result = db_query('SELECT smid, settings FROM {sharemessage}');
+  foreach ($result as $row) {
+    $settings = unserialize($row->settings);
+    if (!empty($settings['services']['tweet'])) {
+      unset($settings['services']['tweet']);
+      $settings['services']['twitter'] = 'twitter';
+      db_update('sharemessage')
+        ->fields(array('settings' => serialize($settings)))
+        ->condition('smid', $row->smid)
+        ->execute();
+    }
+  }
+}

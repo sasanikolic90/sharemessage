@@ -435,8 +435,6 @@ function sharemessage_get_addthis_services() {
             $options[t('Other')][$service->code] = $service->name;
           }
         }
-        // Tweet is not defined?
-        $options[t('Common')]['tweet'] = t('Tweet');
         // Neither is Pinterest Follow.
         $options[t('Common')]['pinterest_follow'] = t('Pinterest follow');
         cache_set('sharemessage_addthis_services:' . $language->language, $options);

@@ -57,7 +57,7 @@ class ShareMessage extends Entity {
                 'type' => 'setting',
               ),
               array(
-                'data' => '//s7.addthis.com/js/250/addthis_widget.js#pubid=' . $profileid,
+                'data' => '//s7.addthis.com/js/300/addthis_widget.js#pubid=' . $profileid,
                 'type' => 'external',
               ),
             ),
