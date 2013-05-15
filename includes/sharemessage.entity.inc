@@ -215,7 +215,7 @@ class ShareMessage extends Entity {
    * Function that adds additional services as part of addThis widget.
    */
   private function build_additional_services_part() {
-    $additional_services = !empty($this->settings['additional_services']) ? $this->settings['additional_services'] : variable_get('sharemessage_default_additional_services', TRUE);
+    $additional_services = isset($this->settings['additional_services']) ? $this->settings['additional_services'] : variable_get('sharemessage_default_additional_services', TRUE);
 
     $additional = '';
     if ($additional_services) {
