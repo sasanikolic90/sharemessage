@@ -281,6 +281,16 @@ function sharemessage_form($form, &$form_state, $sharemessage) {
     '#weight' => 103,
   );
 
+  if (variable_get('sharemessage_message_enforcement', TRUE)) {
+    $form['enforce_usage'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Enforce the usage of this share message on the page it points to'),
+      '#description' => t('If checked, this sharemessage will be used on the page that it is referring to and override the sharemessage there.'),
+      '#default_value' => isset($sharemessage->settings['enforce_usage']) ? $sharemessage->settings['enforce_usage'] : 0,
+      '#weight' => 105,
+    );
+  }
+
   if (module_exists('token')) {
     $form['sharemessage_token_help'] = array(
       '#title' => t('Replacement patterns'),
@@ -303,7 +313,7 @@ function sharemessage_form($form, &$form_state, $sharemessage) {
   }
 
   $form['actions'] = array(
-    '#weight' => 105,
+    '#weight' => 106,
   );
 
   $form['actions']['submit'] = array(
@@ -328,6 +338,11 @@ function sharemessage_check_machine_name_if_exist($value) {
 function sharemessage_form_submit($form, &$form_state) {
   if (!$form_state['values']['override_default_settings']) {
     $form_state['values']['settings'] = array();
+  }
+
+  if (variable_get('sharemessage_message_enforcement', TRUE)) {
+    $form_state['values']['settings']['enforce_usage'] = $form_state['values']['enforce_usage'];
+    unset($form_state['values']['enforce_usage']);
   }
 
   $sharemessage = $form_state['sharemessage'];
@@ -404,6 +419,13 @@ function sharemessage_addthis_settings($form, $form_state) {
     '#default_value' => variable_get('sharemessage_default_icon_style', 'addthis_16x16_style'),
   );
 
+  $form['sharemessage_message_enforcement'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Allow to enforce share messages'),
+    '#description' => t('This will enforce loading of a sharemessage if the ?smid argument is present in an URL. If something else on your site is using this argument, disable this this option.'),
+    '#default_value' => variable_get('sharemessage_message_enforcement', TRUE),
+  );
+
   return system_settings_form($form);
 }
 
@@ -448,4 +470,16 @@ function sharemessage_get_addthis_services() {
   }
 
   return $options;
+}
+
+/**
+ * Implements hook_init().
+ */
+function sharemessage_init() {
+  if (!empty($_GET['smid']) && variable_get('sharemessage_message_enforcement', TRUE)) {
+    $sharemessage = entity_load_single('sharemessage', $_GET['smid']);
+    if (!empty($sharemessage)) {
+      entity_view('sharemessage', array($sharemessage->identifier() => $sharemessage), 'only_og_tags');
+    }
+  }
 }

@@ -43,7 +43,7 @@ class ShareMessageWorkflowTestCase extends ShareMessageTestCase {
 
     // Step 1: Create a share message in the UI.
     $this->drupalGet('admin/config/services/sharemessage/add');
-    $sharemessage = array(
+    $edit = array(
       'label' => 'ShareMessage Test Label',
       'name' => 'sharemessage_test_label',
       'sharemessage_title[en][0][value]' => 'ShareMessage Test Title',
@@ -52,8 +52,8 @@ class ShareMessageWorkflowTestCase extends ShareMessageTestCase {
       'sharemessage_image_url[und][0][value]' => 'http://www.example.com/drupal.jpg',
       'sharemessage_url[und][0][value]' => 'http://www.example.com',
     );
-    $this->drupalPost(NULL, $sharemessage, t('Save share message'));
-    $this->assertText(t('Message @label saved.', array('@label' => $sharemessage['label'])), t('ShareMessage is successfully saved.'));
+    $this->drupalPost(NULL, $edit, t('Save share message'));
+    $this->assertText(t('Message @label saved.', array('@label' => $edit['label'])), t('ShareMessage is successfully saved.'));
 
     // Step 2: Display share message and verify AddThis markup
     // and meta header elements.
@@ -61,17 +61,57 @@ class ShareMessageWorkflowTestCase extends ShareMessageTestCase {
     $raw_html_string = '<div class="addthis_toolbox addthis_default_style addthis_16x16_style"';
     $this->assertRaw($raw_html_string, t('AddThis buttons are displayed.'));
 
-    $meta_title = '<meta property="og:title" content="' . $sharemessage['sharemessage_title[en][0][value]'] . '" />';
+    $meta_title = '<meta property="og:title" content="' . $edit['sharemessage_title[en][0][value]'] . '" />';
     $this->assertRaw($meta_title, t('OG:title exists and has appropriate content.'));
 
-    $meta_description = '<meta property="og:description" content="' . $sharemessage['sharemessage_long[en][0][value]'] . '" />';
+    $meta_description = '<meta property="og:description" content="' . $edit['sharemessage_long[en][0][value]'] . '" />';
     $this->assertRaw($meta_description, t('OG:description exists and has appropriate content.'));
 
-    $meta_image = '<meta property="og:image" content="' . $sharemessage['sharemessage_image_url[und][0][value]'] . '" />';
+    $meta_image = '<meta property="og:image" content="' . $edit['sharemessage_image_url[und][0][value]'] . '" />';
     $this->assertRaw($meta_image, t('OG:image exists and has appropriate content.'));
 
-    $meta_url = '<meta property="og:url" content="' . $sharemessage['sharemessage_url[und][0][value]'] . '" />';
+    $meta_url = '<meta property="og:url" content="' . $edit['sharemessage_url[und][0][value]'] . '" />';
     $this->assertRaw($meta_url, t('OG:url exists and has appropriate content.'));
+
+    $this->drupalGet('admin/config/services/sharemessage/add');
+    // Check if the enforce checkbox is there.
+    $this->assertFieldByName('enforce_usage', NULL, 'The enforce checkbox was found.');
+
+    $edit_2 = array(
+      'label' => 'ShareMessage 2 Test Label',
+      'name' => 'sharemessage_test_label2',
+      'sharemessage_title[en][0][value]' => 'ShareMessage 2 Test Title',
+      'sharemessage_long[en][0][value]' => 'ShareMessage 2 Test Long Description',
+      'sharemessage_short[en][0][value]' => 'ShareMessage 2 Test Short Description',
+      'sharemessage_image_url[und][0][value]' => $edit['sharemessage_image_url[und][0][value]'],
+      'sharemessage_url[und][0][value]' => $edit['sharemessage_url[und][0][value]'],
+      'enforce_usage' => 1,
+    );
+    $this->drupalPost(NULL, $edit_2, t('Save share message'));
+
+    $sharemessage = entity_load_single('sharemessage', 2);
+    // Check if the option was saved as expected.
+    $this->assertEqual(!empty($sharemessage->settings['enforce_usage']), TRUE, 'Enforce setting was saved on the entity.');
+    $this->drupalGet('sharemessage-test/1', array('query' => array('smid' => 2)));
+
+    // Check if the og:description tag gets rendered correctly.
+    $meta_description = '<meta property="og:description" content="' . $edit_2['sharemessage_long[en][0][value]'] . '" />';
+    $this->assertRaw($meta_description, t('OG:description was overridden properly.'));
+    // Check if the og:url tag gets rendered correctly.
+    $url = url($edit['sharemessage_url[und][0][value]'], array('query' => array('smid' => 2)));
+    $meta_url = '<meta property="og:url" content="' . $url . '" />';
+    $this->assertRaw($meta_url, t('OG:url has correct query string.'));
+
+    // Disable enforcement of overrides in the global settings.
+    variable_set('sharemessage_message_enforcement', FALSE);
+    $this->drupalGet('sharemessage-test/1', array('query' => array('smid' => 2)));
+
+    // Check if the og:description tag gets rendered correctly.
+    $meta_description = '<meta property="og:description" content="' . $edit['sharemessage_long[en][0][value]'] . '" />';
+    $this->assertRaw($meta_description, t('OG:description was not overridden.'));
+    // Check if the og:url tag gets rendered correctly.
+    $meta_url = '<meta property="og:url" content="' . $edit['sharemessage_url[und][0][value]'] . '" />';
+    $this->assertRaw($meta_url, t('OG:url does not contain query string.'));
   }
 }
 

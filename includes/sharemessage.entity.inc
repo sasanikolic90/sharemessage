@@ -123,12 +123,10 @@ class ShareMessage extends Entity {
       '#tag' => 'meta',
       '#attributes' => array(
         'property' =>  'og:url',
-        'content' =>$this->getTokenizedField('sharemessage_url', $context, url(current_path(), array('absolute' => TRUE))),
+        'content' => $this->getUrl($context),
       ),
     );
     drupal_add_html_head($og_url, 'og_url');
-
-    // Optional Metadata (og:description).
 
     // OG: Description.
     $og_description = array(
@@ -146,7 +144,7 @@ class ShareMessage extends Entity {
    * Function that adds icon style as part of addThis widget.
    */
   private function buildAttributes() {
-    $icon_style = !empty($this->settings) ? $this->settings['icon_style'] : variable_get('sharemessage_default_icon_style', 'addthis_16x16_style');
+    $icon_style = !empty($this->settings['icon_style']) ? $this->settings['icon_style'] : variable_get('sharemessage_default_icon_style', 'addthis_16x16_style');
     return array(
       'class' => array('addthis_toolbox', 'addthis_default_style', $icon_style),
     );
@@ -158,7 +156,7 @@ class ShareMessage extends Entity {
    */
   function buildAdditionalAttributes($context) {
     $attributes = $this->buildAttributes();
-    $attributes['addthis:url'] = $this->getTokenizedField('sharemessage_url', $context, url(current_path(), array('absolute' => TRUE)));
+    $attributes['addthis:url'] = $this->getUrl($context);
     $attributes['addthis:title'] = $this->getTokenizedField('sharemessage_title', $context);
     $attributes['addthis:description'] = $this->getTokenizedField('sharemessage_long', $context);
     return $attributes;
@@ -185,7 +183,7 @@ class ShareMessage extends Entity {
    * Function that adds services as part of addThis widget.
    */
   private function build_services_part($context) {
-    $services = !empty($this->settings) ? $this->settings['services'] : variable_get('sharemessage_default_services', array());
+    $services = !empty($this->settings['services']) ? $this->settings['services'] : variable_get('sharemessage_default_services', array());
 
     // Configured.
     $services_HTML = '';
@@ -209,6 +207,23 @@ class ShareMessage extends Entity {
     }
 
     return $services_HTML;
+  }
+
+  /**
+   * Getter for the share URL.
+   *
+   * @param array $context
+   *   The context for the token replacements.
+   *
+   * @return string
+   *   The URL for this share message.
+   */
+  private function getUrl($context) {
+    $options = array('absolute' => TRUE);
+    if (!empty($this->settings['enforce_usage'])) {
+      $options['query'] = array('smid' => $this->smid);
+    }
+    return url($this->getTokenizedField('sharemessage_url', $context, current_path()), $options);
   }
 
   /**
