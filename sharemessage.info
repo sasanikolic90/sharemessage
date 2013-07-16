@@ -1,5 +1,5 @@
-name = Shareessage
-description = New Sharing Module.
+name = ShareMessage
+description = Sharing module using addthis widgets and entity based storage.
 core = 7.x
 
 dependencies[] = entity
