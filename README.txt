@@ -70,6 +70,11 @@ OPTIONS
 - Default icon style:
   The size of the share buttons in pixel.
 
+- Use local service definitions file:
+  Enable this if your server is located behind some firewall that is blocking
+  access to http://cache.addthiscdn.com/services/v1/sharing.en.json and the
+  services select field is empty.
+
 
 EXPORT/IMPORT
 -------------
@@ -86,6 +91,14 @@ In order to test your shares on facebook, you can share your nodes or pages the
 usual way, by clicking on the like button. This has the huge disadvantage, that
 facebook may cache your share requests of the same page. To avoid this annoying
 issue, use facebooks debugger tool: http://developers.facebook.com/tools/debug.
+
+
+LOCAL SERVICES DEFINITION
+-------------
+When using the option "Use local service definitions file", the available
+services might be outdated. If you see that they are outdated the services
+definitions file, that is shipped with the module, has to be updated. Please
+create a new issue for that at https://drupal.org/project/issues/sharemessage .
 
 
 CREDITS

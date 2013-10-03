@@ -426,6 +426,13 @@ function sharemessage_addthis_settings($form, $form_state) {
     '#default_value' => variable_get('sharemessage_message_enforcement', TRUE),
   );
 
+  $form['sharemessage_local_services_definition'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Use local service definitions file'),
+    '#description' => t('Check this if you are behind a firewall and the module cannot access the services definition at http://cache.addthiscdn.com/services/v1/sharing.en.json.'),
+    '#default_value' => variable_get('sharemessage_local_services_definition', FALSE),
+  );
+
   return system_settings_form($form);
 }
 
@@ -441,8 +448,7 @@ function sharemessage_get_addthis_services() {
       $options = $cache->data;
     }
     else {
-      $json_services_url = variable_get('sharemessage_addthis_services', 'http://cache.addthiscdn.com/services/v1/sharing.en.json');
-      $json = file_get_contents($json_services_url);
+      $json = sharemessage_get_services_json();
       $output = json_decode($json);
       if (!empty($output)) {
         $options = array(t('Common') => array(), t('Mail') => array(), t('Other') => array());
@@ -482,4 +488,23 @@ function sharemessage_init() {
       entity_view('sharemessage', array($sharemessage->identifier() => $sharemessage), 'only_og_tags');
     }
   }
+}
+
+/**
+ * Getter for the services definitions.
+ *
+ * If option is set the local file within the module folder will be read instead
+ * of the file that is hosted on the addthis cdn.
+ *
+ * @return string
+ *   The path to the services definition file.
+ */
+function sharemessage_get_services_json() {
+  if (variable_get('sharemessage_local_services_definition', FALSE)) {
+    $file_uri = drupal_get_path('module', 'sharemessage') . '/addthis/sharing.en.json';
+  }
+  else {
+    $file_uri = 'http://cache.addthiscdn.com/services/v1/sharing.en.json';
+  }
+  return file_get_contents($file_uri);
 }
