@@ -22,54 +22,6 @@ function sharemessage_permission() {
 }
 
 /**
- * Implements hook_entity_info().
- */
-function sharemessage_entity_info() {
-  $entities = array(
-    'sharemessage' => array(
-      'module' => 'sharemessage',
-      'label' => t('ShareMessage'),
-      'access callback' => 'sharemessage_access',
-      'entity class' => 'ShareMessage',
-      'controller class' => 'ShareMessageController',
-      'metadata controller class' => 'ShareMessageMetadataController',
-      'fieldable' => TRUE,
-      'exportable' => TRUE,
-      'base table' => 'sharemessage',
-      'entity keys' => array(
-        'id' => 'smid',
-        'label' => 'label',
-        'name' => 'name',
-      ),
-      'view modes' => array(
-        'full' => array(
-          'label' => t('Full content'),
-          'custom settings' => FALSE,
-        ),
-        'only_og_tags' => array(
-          'label' => t('Only og tags'),
-          'custom settings' => FALSE,
-        ),
-      ),
-      'admin ui' => array(
-        'controller class' => 'ShareMessageUIController',
-        'path' => 'admin/config/services/sharemessage',
-        'menu wildcard' => '%sharemessage',
-      ),
-      'translation' => array(
-        'entity_translation' => array(
-          'base path' => 'admin/config/services/sharemessage/manage/%sharemessage',
-          'edit path' => 'admin/config/services/sharemessage/manage/%sharemessage',
-          'path wildcard' => '%sharemessage',
-        ),
-      ),
-    ),
-  );
-
-  return $entities;
-}
-
-/**
  * Access callback for sharemessage.
  */
 function sharemessage_access($op, $sharemessage, $account = NULL, $entity_type = NULL) {

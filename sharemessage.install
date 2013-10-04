@@ -19,6 +19,12 @@ function sharemessage_schema() {
         'not null' => TRUE,
         'description' => 'Message ID.',
       ),
+      'uuid' => array(
+        'description' => 'Unique Key: Universally unique identifier for this entity.',
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => FALSE,
+      ),
       'label' => array(
         'type' => 'varchar',
         'length' => 128,
@@ -102,6 +108,7 @@ function sharemessage_schema() {
  * Implements hook_install().
  */
 function sharemessage_install() {
+  /*
   // This module should show only the addThis buttons,
   // so that all fields will be hidden.
   $display_hidden = array(
@@ -258,18 +265,21 @@ function sharemessage_install() {
     ) + $display_hidden;
     field_create_instance($instance);
   }
+  */
 }
 
 /**
  * Implements hook_uninstall().
  */
 function sharemessage_uninstall() {
+  /*
   field_delete_field('sharemessage_title');
   field_delete_field('sharemessage_long');
   field_delete_field('sharemessage_short');
   field_delete_field('sharemessage_image');
   field_delete_field('sharemessage_image_url');
   field_delete_field('sharemessage_url');
+  */
 }
 
 /**

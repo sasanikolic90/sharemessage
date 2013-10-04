@@ -101,7 +101,7 @@ class SettingsForm extends ConfigFormBase {
       ->set('sharemessage_default_counter', $form_state['values']['sharemessage_default_counter'])
       ->set('sharemessage_default_icon_style', $form_state['values']['sharemessage_default_icon_style'])
       ->set('sharemessage_message_enforcement', $form_state['values']['sharemessage_message_enforcement'])
-      ->set('sharemessage_local_services_definition', $form_state['values']['sharemessage_local_services_definitionl'])
+      ->set('sharemessage_local_services_definition', $form_state['values']['sharemessage_local_services_definition'])
       ->save();
   }
 

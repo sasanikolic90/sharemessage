@@ -2,19 +2,82 @@
 
 /**
  * @file
- * Definition of ShareMessage entity class.
+ * Definition of Drupal\sharemessage\ShareMessageRenderController.
  */
 
+namespace Drupal\sharemessage\Entity\Controller;
 
-/*
- * Entity class for the ShareMessage entity.
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityRenderController;
+use Drupal\entity\Entity\EntityDisplay;
+
+/**
+ * Render controller for nodes.
  */
-class ShareMessage extends Entity {
+class ShareMessageRenderController extends EntityRenderController {
 
   /**
-   * Overrides Entity::buildContent().
+   * Overrides Drupal\Core\Entity\EntityRenderController::buildContent().
    */
-  public function buildContent($view_mode = 'full', $langcode = NULL) {
+  public function buildContent(array $entities, array $displays, $view_mode, $langcode = NULL) {
+    $return = array();
+    if (empty($entities)) {
+      return $return;
+    }
+
+    // Attach user account.
+    user_attach_accounts($entities);
+
+    parent::buildContent($entities, $displays, $view_mode, $langcode);
+
+    foreach ($entities as $entity) {
+      $bundle = $entity->bundle();
+      $display = $displays[$bundle];
+
+      $entity->content['links'] = array(
+        '#theme' => 'links__node',
+        '#pre_render' => array('drupal_pre_render_links'),
+        '#attributes' => array('class' => array('links', 'inline')),
+      );
+
+      // Always display a read more link on teasers because we have no way
+      // to know when a teaser view is different than a full view.
+      $links = array();
+      if ($view_mode == 'teaser') {
+        $node_title_stripped = strip_tags($entity->label());
+        $links['node-readmore'] = array(
+          'title' => t('Read more<span class="visually-hidden"> about @title</span>', array(
+            '@title' => $node_title_stripped,
+          )),
+          'href' => 'node/' . $entity->id(),
+          'html' => TRUE,
+          'attributes' => array(
+            'rel' => 'tag',
+            'title' => $node_title_stripped,
+          ),
+        );
+      }
+
+      $entity->content['links']['node'] = array(
+        '#theme' => 'links__node__node',
+        '#links' => $links,
+        '#attributes' => array('class' => array('links', 'inline')),
+      );
+
+      // Add Language field text element to node render array.
+      if ($display->getComponent('language')) {
+        $entity->content['language'] = array(
+          '#type' => 'item',
+          '#title' => t('Language'),
+          '#markup' => language_name($langcode),
+          '#prefix' => '<div id="field-language-display">',
+          '#suffix' => '</div>'
+        );
+      }
+    }
+
+
+
     $profileid = variable_get('sharemessage_addthis_profile_id', 1);
 
     $context = array('sharemessage' => $this);
@@ -65,8 +128,20 @@ class ShareMessage extends Entity {
         ),
       );
     }
+  }
 
-    return entity_get_controller($this->entityType)->buildContent($this, $view_mode, $langcode, $content);
+  /**
+   * Overrides Drupal\Core\Entity\EntityRenderController::alterBuild().
+   */
+  protected function alterBuild(array &$build, EntityInterface $entity, EntityDisplay $display, $view_mode, $langcode = NULL) {
+    parent::alterBuild($build, $entity, $display, $view_mode, $langcode);
+    if ($entity->id()) {
+      $build['#contextual_links']['node'] = array('node', array($entity->id()));
+    }
+
+    // The node 'submitted' info is not rendered in a standard way (renderable
+    // array) so we have to add a cache tag manually.
+    $build['#cache']['tags']['user'][] = $entity->uid;
   }
 
   /**
@@ -110,7 +185,7 @@ class ShareMessage extends Entity {
         '#type' => 'html_tag',
         '#tag' => 'meta',
         '#attributes' => array(
-          'property' =>  'og:image',
+          'property' => 'og:image',
           'content' => $image_url,
         ),
       );
@@ -122,7 +197,7 @@ class ShareMessage extends Entity {
       '#type' => 'html_tag',
       '#tag' => 'meta',
       '#attributes' => array(
-        'property' =>  'og:url',
+        'property' => 'og:url',
         'content' => $this->getUrl($context),
       ),
     );
@@ -242,4 +317,5 @@ class ShareMessage extends Entity {
     }
     return $additional;
   }
+
 }
