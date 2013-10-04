@@ -1,5 +1,5 @@
-devel_admin_settings:
-  pattern: 'admin/config/services/sharemessage/settings'
+sharemessage.settings:
+  path: 'admin/config/services/sharemessage/settings'
   defaults:
     _form: '\Drupal\sharemessage\Form\SettingsForm'
   requirements:

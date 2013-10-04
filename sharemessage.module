@@ -4,6 +4,7 @@
  * @file
  * New Sharing Module.
  */
+use Drupal\sharemessage\Entity\ShareMessage;
 
 
 /**
@@ -425,11 +426,10 @@ function sharemessage_addthis_settings($form, $form_state) {
  * Load AddThis services.
  */
 function sharemessage_get_addthis_services() {
-  global $language;
   $options = &drupal_static(__FUNCTION__);
 
   if (!isset($options)) {
-    if ($cache = cache_get('sharemessage_addthis_services:' . $language->language)) {
+    if ($cache = \Drupal::cache()->get('sharemessage_addthis_services:' . \Drupal::languageManager()->getLanguage()->id)) {
       $options = $cache->data;
     }
     else {
@@ -452,10 +452,10 @@ function sharemessage_get_addthis_services() {
         $options[t('Common')]['tweet'] = t('Tweet');
         // Neither is Pinterest Follow.
         $options[t('Common')]['pinterest_follow'] = t('Pinterest follow');
-        cache_set('sharemessage_addthis_services:' . $language->language, $options);
+        \Drupal::cache()->set('sharemessage_addthis_services:' . \Drupal::languageManager()->getLanguage()->id, $options);
       }
       else {
-        cache_clear_all('sharemessage_addthis_services:' . $language->language, 'cache', TRUE);
+        \Drupal::cache()->delete('sharemessage_addthis_services:' . \Drupal::languageManager()->getLanguage()->id);
       }
     }
   }
