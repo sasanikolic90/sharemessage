@@ -1,0 +1,6 @@
+devel_admin_settings:
+  pattern: 'admin/config/services/sharemessage/settings'
+  defaults:
+    _form: '\Drupal\sharemessage\Form\SettingsForm'
+  requirements:
+    _permission: 'administer sharemessage entities'

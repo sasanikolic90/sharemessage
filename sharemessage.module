@@ -69,21 +69,6 @@ function sharemessage_entity_info() {
 }
 
 /**
- * Implements hook_menu().
- */
-function sharemessage_menu() {
-  $items = array();
-  $items['admin/config/services/sharemessage/settings'] = array(
-    'title' => 'Share message Addthis settings',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('sharemessage_addthis_settings'),
-    'access arguments' => array('administer sharemessage entities'),
-    'type' => MENU_LOCAL_TASK,
-  );
-  return $items;
-}
-
-/**
  * Access callback for sharemessage.
  */
 function sharemessage_access($op, $sharemessage, $account = NULL, $entity_type = NULL) {
