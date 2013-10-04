@@ -7,7 +7,6 @@
 
 namespace Drupal\sharemessage\Form;
 
-use Drupal\Component\Utility\MapArray;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\system\SystemConfigFormBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -95,42 +94,15 @@ class SettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, array &$form_state) {
-    $this->configFactory->get('devel.settings')
-      ->set('query_display', $form_state['values']['query_display'])
-      ->set('query_sort', $form_state['values']['query_sort'])
-      ->set('execution', $form_state['values']['execution'])
-      ->set('xhprof_enabled', $form_state['values']['xhprof_enabled'])
-      ->set('xhprof_directory', $form_state['values']['xhprof_directory'])
-      ->set('xhprof_url', $form_state['values']['xhprof_url'])
-      ->set('api_url', $form_state['values']['api_url'])
-      ->set('timer', $form_state['values']['timer'])
-      ->set('memory', $form_state['values']['memory'])
-      ->set('redirect_page', $form_state['values']['redirect_page'])
-      ->set('page_alter', $form_state['values']['page_alter'])
-      ->set('raw_names', $form_state['values']['raw_names'])
-      ->set('error_handlers', $form_state['values']['error_handlers'])
-      ->set('krumo_skin', $form_state['values']['krumo_skin'])
-      ->set('rebuild_theme_registry', $form_state['values']['rebuild_theme_registry'])
-      ->set('use_uncompressed_jquery', $form_state['values']['use_uncompressed_jquery'])
+    $this->configFactory->get('sharemessage.settings')
+      ->set('sharemessage_addthis_profile_id', $form_state['values']['sharemessage_addthis_profile_id'])
+      ->set('sharemessage_default_services', $form_state['values']['sharemessage_default_services'])
+      ->set('sharemessage_default_additional_services', $form_state['values']['sharemessage_default_additional_services'])
+      ->set('sharemessage_default_counter', $form_state['values']['sharemessage_default_counter'])
+      ->set('sharemessage_default_icon_style', $form_state['values']['sharemessage_default_icon_style'])
+      ->set('sharemessage_message_enforcement', $form_state['values']['sharemessage_message_enforcement'])
+      ->set('sharemessage_local_services_definition', $form_state['values']['sharemessage_local_services_definitionl'])
       ->save();
-  }
-
-
-  /**
-   * @param string $severity
-   */
-  protected function demonstrateErrorHandlers($severity) {
-    switch ($severity) {
-      case 'warning':
-        $undefined = $undefined;
-        1/0;
-        break;
-      case 'error':
-        $undefined = $undefined;
-        1/0;
-        devel_undefined_function();
-        break;
-    }
   }
 
 }
