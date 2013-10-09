@@ -384,16 +384,6 @@ function sharemessage_addthis_settings($form, $form_state) {
   );
 
   $form['sharemessage_default_additional_services'] = array(
-    '#type' => 'radios',
-    '#title' => t('Show additional services button'),
-    '#options' => array(
-      TRUE => t('Yes'),
-      FALSE => t('No'),
-    ),
-    '#default_value' => variable_get('sharemessage_default_additional_services', TRUE),
-  );
-
-  $form['sharemessage_default_additional_services'] = array(
     '#type' => 'checkbox',
     '#title' => t('Show additional services button'),
     '#default_value' => variable_get('sharemessage_default_additional_services', TRUE),
