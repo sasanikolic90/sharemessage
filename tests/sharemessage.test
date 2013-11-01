@@ -14,8 +14,8 @@ class ShareMessageTestCase extends DrupalWebTestCase {
     $permissions = array(
       'access administration pages',
       'administer blocks',
-      'administer sharemessage entities',
-      'view sharemessage entities',
+      'administer sharemessages',
+      'view sharemessages',
     );
 
     $admin_user = $this->drupalCreateUser($permissions);

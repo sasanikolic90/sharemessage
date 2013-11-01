@@ -119,13 +119,6 @@ class ShareMessageFormController extends EntityFormController {
       ),
     );
 
-    $form['block'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Provide a block'),
-      '#default_value' => isset($sharemessage->block) ? $sharemessage->block : 0,
-      '#weight' => 20,
-    );
-
     if ($defaults->get('sharemessage_message_enforcement')) {
       $form['enforce_usage'] = array(
         '#type' => 'checkbox',
@@ -182,7 +175,7 @@ class ShareMessageFormController extends EntityFormController {
       watchdog('contact', 'ShareMessage %label has been added.', array('%label' => $sharemessage->label()), WATCHDOG_NOTICE, l(t('Edit'), $uri['path'] . '/edit'));
     }
 
-    $form_state['redirect'] = 'admin/structure/services/sharemessage/list';
+    $form_state['redirect'] = 'admin/config/services/sharemessage/list';
   }
 
   /**

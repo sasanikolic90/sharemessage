@@ -23,10 +23,10 @@ function sharemessage_menu() {
  */
 function sharemessage_permission() {
   return array(
-    'view sharemessage entities' => array(
+    'view sharemessages' => array(
       'title' => t('View ShareMessage entities.'),
     ),
-    'administer sharemessage entities' => array(
+    'administer sharemessages' => array(
       'title' => t('Administer ShareMessage entities.'),
     ),
   );
@@ -38,9 +38,9 @@ function sharemessage_permission() {
 function sharemessage_access($op, $sharemessage, $account = NULL, $entity_type = NULL) {
   switch ($op) {
     case 'view':
-      return user_access('view sharemessage entities', $account);
+      return user_access('view sharemessages', $account);
     default:
-      return user_access('administer sharemessage entities', $account);
+      return user_access('administer sharemessages', $account);
   }
 }
 

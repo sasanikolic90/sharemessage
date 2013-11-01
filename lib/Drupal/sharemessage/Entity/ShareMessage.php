@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Definition of ShareMessage entity class.
+ * Definition of ShareMessage config entity class.
  */
 
 namespace Drupal\sharemessage\Entity;
@@ -17,7 +17,7 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *   controllers = {
  *     "storage" = "Drupal\Core\Config\Entity\ConfigStorageController",
  *     "access" = "Drupal\sharemessage\Entity\Controller\ShareMessageAccessController",
- *     "render" = "Drupal\sharemessage\Entity\Controller\ShareMessageRenderController",
+ *     "view_builder" = "Drupal\sharemessage\Entity\Controller\ShareMessageViewBuilder",
  *     "list" = "Drupal\sharemessage\Entity\Controller\ShareMessageListController",
  *     "form" = {
  *       "add" = "Drupal\sharemessage\Entity\Controller\ShareMessageFormController",
@@ -65,6 +65,27 @@ class ShareMessage extends ConfigEntityBase {
    * @var string
    */
   public $settings;
+
+  /**
+   * The title of the sharemessage.
+   *
+   * @var string
+   */
+  public $title;
+
+  /**
+   * The long share text of the sharemessage.
+   *
+   * @var string
+   */
+  public $message_long;
+
+  /**
+   * The short text of the sharemessage, used for twitter.
+   *
+   * @var string
+   */
+  public $message_short;
 
   /**
    * {@inheritdoc}
