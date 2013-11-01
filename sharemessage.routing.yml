@@ -25,3 +25,10 @@ sharemessage.sharemessage_list:
     _entity_list: 'sharemessage'
   requirements:
     _permission: 'administer sharemessage entities'
+
+sharemessage.sharemessage_delete:
+  path: 'admin/structure/services/sharemessage/manage/{sharemessage}/delete'
+  defaults:
+    _entity_form: sharemessage.delete
+  requirements:
+    _entity_access: sharemessage.update

@@ -182,6 +182,7 @@ class ShareMessageFormController extends EntityFormController {
       $form['sharemessage_token_help']['browser'] = array(
         '#theme' => 'token_tree',
         '#token_types' => array('node', 'sharemessage'),
+        '#dialog' => TRUE,
       );
     }
 
@@ -222,7 +223,6 @@ class ShareMessageFormController extends EntityFormController {
    * Overrides Drupal\Core\Entity\EntityFormController::delete().
    */
   public function delete(array $form, array &$form_state) {
-    // @todo this callback is not defined yet.
     $form_state['redirect'] = 'admin/structure/services/sharemessage/' . $this->entity->id() . '/delete';
   }
 

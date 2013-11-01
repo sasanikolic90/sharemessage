@@ -21,13 +21,13 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *     "list" = "Drupal\sharemessage\Entity\Controller\ShareMessageListController",
  *     "form" = {
  *       "add" = "Drupal\sharemessage\Entity\Controller\ShareMessageFormController",
- *       "edit" = "Drupal\sharemessage\Entity\Controller\ShareMessageFormController"
+ *       "edit" = "Drupal\sharemessage\Entity\Controller\ShareMessageFormController",
+ *       "delete" = "Drupal\sharemessage\Entity\Controller\ShareMessageDeleteForm"
  *     }
  *   },
  *   entity_keys = {
  *     "id" = "id",
- *     "label" = "label",
- *     "status" = "status"
+ *     "label" = "label"
  *   },
  *   config_prefix = "sharemessage.sharemessage",
  *   links = {
@@ -49,7 +49,7 @@ class ShareMessage extends ConfigEntityBase {
    *
    * @var string
    */
-  protected $label;
+  public $label;
 
   /**
    * The flag for default overrides of the sharemessage.
