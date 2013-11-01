@@ -44,18 +44,58 @@ class ShareMessageFormController extends EntityFormController {
       '#default_value' => $sharemessage->id(),
     );
 
+    $form['title'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Title'),
+      '#default_value' => $sharemessage->title,
+      '#description' => t('Used as title in the share message, where applicable: Facebook, E-Mail subject, ...'),
+      '#weight' => 5,
+    );
+
+    $form['message_long'] = array(
+      '#type' => 'textarea',
+      '#title' => t('Long Description'),
+      '#default_value' => $sharemessage->message_long,
+      '#description' => t('Used as long description for the share message, where applicable: Facebook, E-mail body, ...'),
+      '#weight' => 10,
+    );
+
+    $form['message_short'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Short Description'),
+      '#default_value' => $sharemessage->message_short,
+      '#description' => t('Used as short description for twitter messages.'),
+      '#weight' => 15,
+    );
+
+    $form['image_url'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Image URL'),
+      '#default_value' => $sharemessage->image_url,
+      '#description' => t('The image URL that will be used for sharing.'),
+      '#weight' => 20,
+    );
+
+    $form['share_url'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Shared URL'),
+      '#default_value' => $sharemessage->share_url,
+      '#description' => t('Specific URL that will be shared, defaults to the current page.'),
+      '#weight' => 25,
+    );
+
     // Settings fieldset.
     $form['override_default_settings'] = array(
       '#type' => 'checkbox',
       '#title' => t('Override default settings'),
       '#default_value' => $sharemessage->override_default_settings,
-      '#weight' => 10,
+      '#weight' => 30,
     );
 
     $form['settings'] = array(
       '#type' => 'fieldset',
       '#tree' => TRUE,
-      '#weight' => 15,
+      '#weight' => 35,
       '#states' => array(
         'invisible' => array(
           ':input[name="override_default_settings"]' => array('checked' => FALSE),
@@ -125,7 +165,7 @@ class ShareMessageFormController extends EntityFormController {
         '#title' => t('Enforce the usage of this share message on the page it points to'),
         '#description' => t('If checked, this sharemessage will be used on the page that it is referring to and override the sharemessage there.'),
         '#default_value' => isset($sharemessage->settings['enforce_usage']) ? $sharemessage->settings['enforce_usage'] : 0,
-        '#weight' => 25,
+        '#weight' => 40,
       );
     }
 
@@ -136,7 +176,7 @@ class ShareMessageFormController extends EntityFormController {
         '#collapsible' => TRUE,
         '#collapsed' => TRUE,
         '#description' => t('These tokens can be used in all text fields.'),
-        '#weight' => 30,
+        '#weight' => 45,
       );
 
       $form['sharemessage_token_help']['browser'] = array(
@@ -182,6 +222,7 @@ class ShareMessageFormController extends EntityFormController {
    * Overrides Drupal\Core\Entity\EntityFormController::delete().
    */
   public function delete(array $form, array &$form_state) {
+    // @todo this callback is not defined yet.
     $form_state['redirect'] = 'admin/structure/services/sharemessage/' . $this->entity->id() . '/delete';
   }
 

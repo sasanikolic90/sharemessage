@@ -32,8 +32,10 @@ class ShareMessageViewBuilder extends EntityViewBuilder {
       if ($node = menu_get_object()) {
         $context['node'] = $node;
       }
-      // @todo provide alter possibility
-      //drupal_alter('sharemessage_token_context', $this, $context);
+
+      // Let other modules alter the sharing context that will be used for token
+      // as base for replacements.
+      \Drupal::moduleHandler()->alter('sharemessage_token_context', $this, $context);
 
       // Add OG Tags to the page.
       $addThis_attributes = FALSE;
@@ -92,7 +94,7 @@ class ShareMessageViewBuilder extends EntityViewBuilder {
       '#tag' => 'meta',
       '#attributes' => array(
         'property' => 'og:title',
-        'content' => $this->getTokenizedField('sharemessage_title', $context),
+        'content' => $this->getTokenizedField($entity->title, $context),
       ),
     );
     drupal_add_html_head($og_title, 'og_title');
@@ -103,19 +105,19 @@ class ShareMessageViewBuilder extends EntityViewBuilder {
       '#tag' => 'meta',
       '#attributes' => array(
         'property' => 'og:type',
+        // @todo don't hardcode this, make configurable per sharemessage entity.
         'content' => 'website',
       ),
     );
     drupal_add_html_head($og_type, 'og_type');
 
-    // @todo OG: Image.
-    /*
+    /* @todo add possibility to upload a file for static image.
     if (isset($this->sharemessage_image[LANGUAGE_NONE][0]['uri'])) {
       $image_url = file_create_url($this->sharemessage_image[LANGUAGE_NONE][0]['uri']);
     }
-    else {
-      $image_url = $this->getTokenizedField('sharemessage_image_url', $context);
-    }
+    else {*/
+      $image_url = $this->getTokenizedField($entity->image_url, $context);
+    //}
     if ($image_url) {
       $og_image = array(
         '#type' => 'html_tag',
@@ -127,7 +129,6 @@ class ShareMessageViewBuilder extends EntityViewBuilder {
       );
       drupal_add_html_head($og_image, 'og_image');
     }
-    */
 
     // OG: URL.
     $og_url = array(
@@ -146,7 +147,7 @@ class ShareMessageViewBuilder extends EntityViewBuilder {
       '#tag' => 'meta',
       '#attributes' => array(
         'property' => 'og:description',
-        'content' => $this->getTokenizedField('sharemessage_long', $context),
+        'content' => $this->getTokenizedField($entity->message_long, $context),
       ),
     );
     drupal_add_html_head($og_description, 'og_description');
@@ -184,9 +185,9 @@ class ShareMessageViewBuilder extends EntityViewBuilder {
    * @return
    *   If existent, the field value with tokens replace, the default otherwise.
    */
-  protected function getTokenizedField($field_value, $context, $default = '') {
-    if ($field_value) {
-      return strip_tags(\Drupal::token()->replace($field_value, $context));
+  protected function getTokenizedField($property_value, $context, $default = '') {
+    if ($property_value) {
+      return strip_tags(\Drupal::token()->replace($property_value, $context));
     }
     return $default;
   }
@@ -204,7 +205,7 @@ class ShareMessageViewBuilder extends EntityViewBuilder {
       foreach ($services as $key => $service) {
         if ($key == 'twitter' && $entity->message_short) {
           // @todo. This doesn't work, should be printed here.
-          drupal_add_js("var addthis_share = { templates: { twitter: '" . $this->getTokenizedField('sharemessage_short', $context) . "', } }", array('type' => 'inline'));
+          drupal_add_js("var addthis_share = { templates: { twitter: '" . $this->getTokenizedField($entity->message_short, $context) . "', } }", array('type' => 'inline'));
         }
         $services_HTML .= '<a class="addthis_button_' . $key . '"></a>';
       }
@@ -236,7 +237,7 @@ class ShareMessageViewBuilder extends EntityViewBuilder {
     if (!empty($entity->settings['enforce_usage'])) {
       $options['query'] = array('smid' => $entity->id);
     }
-    return url($this->getTokenizedField('sharemessage_url', $context, current_path()), $options);
+    return url($this->getTokenizedField($entity->share_url, $context, current_path()), $options);
   }
 
   /**

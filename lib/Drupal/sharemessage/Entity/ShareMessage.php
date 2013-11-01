@@ -55,7 +55,6 @@ class ShareMessage extends ConfigEntityBase {
    * The flag for default overrides of the sharemessage.
    *
    * @var string
-   * @todo add getter
    */
   public $override_default_settings;
 
@@ -88,6 +87,20 @@ class ShareMessage extends ConfigEntityBase {
   public $message_short;
 
   /**
+   * The image URL that will be used for sharing.
+   *
+   * @var string
+   */
+  public $image_url;
+
+  /**
+   * Specific URL that will be shared, defaults to the current page
+   *
+   * @var string
+   */
+  public $share_url;
+
+  /**
    * {@inheritdoc}
    */
   public function getLabel() {
@@ -99,6 +112,14 @@ class ShareMessage extends ConfigEntityBase {
    */
   public function setLabel($label) {
     $this->set('label', $label);
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setTitle($title) {
+    $this->set('title', $title);
     return $this;
   }
 
@@ -117,21 +138,4 @@ class ShareMessage extends ConfigEntityBase {
     return $this;
   }
 
-  /**
-   * Overrides \Drupal\Core\Config\Entity\ConfigEntityBase::getExportProperties();
-   */
-  public function getExportProperties() {
-    $names = array(
-      'status',
-      'label',
-      'id',
-      'uuid',
-      'langcode',
-    );
-    $properties = array();
-    foreach ($names as $name) {
-      $properties[$name] = $this->get($name);
-    }
-    return $properties;
-  }
 }
