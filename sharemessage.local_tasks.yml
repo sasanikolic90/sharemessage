@@ -1,0 +1,9 @@
+sharemessage.sharemessage_list:
+  route_name: sharemessage.sharemessage_list
+  tab_root_id: sharemessage.sharemessage_list
+  title: 'List'
+  weight: -10
+sharemessage.settings:
+  route_name: sharemessage.settings
+  tab_root_id: sharemessage.sharemessage_list
+  title: 'Settings'
