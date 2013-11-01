@@ -6,6 +6,17 @@
  */
 use Drupal\sharemessage\Entity\ShareMessage;
 
+/**
+ * Implements hook_menu().
+ */
+function sharemessage_menu() {
+  $items['admin/config/services/sharemessage'] = array(
+    'title' => 'ShareMessages',
+    'description' => 'Manage ShareMessages.',
+    'route_name' => 'sharemessage.sharemessage_list',
+  );
+  return $items;
+}
 
 /**
  * Implements hook_permission().
