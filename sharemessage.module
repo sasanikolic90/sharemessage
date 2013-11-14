@@ -209,6 +209,7 @@ function sharemessage_form($form, &$form_state, $sharemessage) {
 
   $form['settings'] = array(
     '#type' => 'fieldset',
+    '#title' => t('Customized settings'),
     '#tree' => TRUE,
     '#weight' => 102,
     '#states' => array(
@@ -216,6 +217,14 @@ function sharemessage_form($form, &$form_state, $sharemessage) {
         ':input[name="override_default_settings"]' => array('checked' => FALSE),
       ),
     ),
+  );
+
+  $form['settings']['icon_style'] = array(
+    '#type' => 'radios',
+    '#title' => t('Icon style'),
+    '#options' => sharemessage_get_sharewidget_options(),
+    '#default_value' => isset($sharemessage->settings['icon_style']) ? $sharemessage->settings['icon_style'] : variable_get('sharemessage_default_icon_style', 'addthis_16x16_style'),
+    '#description' => t('For the vertical floated items with counters, the only available services are Facebook Like, Google+ Share and Tweet. The addthis counter will also get added automatically when enabling additional services button.'),
   );
 
   $form['settings']['services'] = array(
@@ -227,7 +236,7 @@ function sharemessage_form($form, &$form_state, $sharemessage) {
     '#size' => 10,
     '#states' => array(
       'invisible' => array(
-        ':input[name="override_default_settings"]' => array('checked' => FALSE),
+        ':input[name="settings[icon_style]"]' => array('value' => 'addthis_counter_style'),
       ),
     ),
   );
@@ -236,11 +245,6 @@ function sharemessage_form($form, &$form_state, $sharemessage) {
     '#type' => 'checkbox',
     '#title' => t('Show additional services button'),
     '#default_value' => isset($sharemessage->settings['additional_services']) ? $sharemessage->settings['additional_services'] : variable_get('sharemessage_default_additional_services', TRUE),
-    '#states' => array(
-      'invisible' => array(
-        ':input[name="override_default_settings"]' => array('checked' => FALSE),
-      ),
-    ),
   );
 
   $form['settings']['counter'] = array(
@@ -254,22 +258,7 @@ function sharemessage_form($form, &$form_state, $sharemessage) {
     '#default_value' => isset($sharemessage->settings['counter']) ? $sharemessage->settings['counter'] : variable_get('sharemessage_default_counter', FALSE),
     '#states' => array(
       'invisible' => array(
-        ':input[name="override_default_settings"]' => array('checked' => FALSE),
-      ),
-    ),
-  );
-
-  $form['settings']['icon_style'] = array(
-    '#type' => 'radios',
-    '#title' => t('Icon style'),
-    '#options' => array(
-      'addthis_16x16_style' => '16x16 pix',
-      'addthis_32x32_style' => '32x32 pix',
-    ),
-    '#default_value' => isset($sharemessage->settings['icon_style']) ? $sharemessage->settings['icon_style'] : variable_get('sharemessage_default_icon_style', 'addthis_16x16_style'),
-    '#states' => array(
-      'invisible' => array(
-        ':input[name="override_default_settings"]' => array('checked' => FALSE),
+        ':input[name="settings[icon_style]"]' => array('value' => 'addthis_counter_style'),
       ),
     ),
   );
@@ -340,6 +329,18 @@ function sharemessage_form_submit($form, &$form_state) {
   if (!$form_state['values']['override_default_settings']) {
     $form_state['values']['settings'] = array();
   }
+  else {
+    // Set default settings for the addthis counter style.
+    if ($form_state['values']['settings']['icon_style'] == 'addthis_counter_style') {
+      $form_state['values']['settings']['services'] = array(
+        'facebook_like' => 'facebook_like',
+        'tweet' => 'tweet',
+        'google_plusone' => 'google_plusone',
+      );
+      // Counter will be added anyway for this style.
+      $form_state['values']['settings']['counter'] = FALSE;
+    }
+  }
 
   if (variable_get('sharemessage_message_enforcement', TRUE)) {
     $form_state['values']['settings']['enforce_usage'] = $form_state['values']['enforce_usage'];
@@ -403,10 +404,7 @@ function sharemessage_addthis_settings($form, $form_state) {
   $form['sharemessage_default_icon_style'] = array(
     '#title' => t('Default icon style'),
     '#type' => 'radios',
-    '#options' => array(
-      'addthis_16x16_style' => '16x16 pix',
-      'addthis_32x32_style' => '32x32 pix',
-    ),
+    '#options' => sharemessage_get_sharewidget_options(),
     '#default_value' => variable_get('sharemessage_default_icon_style', 'addthis_16x16_style'),
   );
 
@@ -498,4 +496,20 @@ function sharemessage_get_services_json() {
     $file_uri = 'http://cache.addthiscdn.com/services/v1/sharing.en.json';
   }
   return file_get_contents($file_uri);
+}
+
+/**
+ * Getter for the widget format options.
+ *
+ * @return array
+ *   The available styles indexed by html class used by addthis.
+ *
+ * @todo add all available styles here.
+ */
+function sharemessage_get_sharewidget_options() {
+  return array(
+    'addthis_16x16_style' => '16x16 pix',
+    'addthis_32x32_style' => '32x32 pix',
+    'addthis_counter_style' => 'Vertical floated with counters',
+  );
 }

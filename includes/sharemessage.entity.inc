@@ -144,9 +144,10 @@ class ShareMessage extends Entity {
    * Function that adds icon style as part of addThis widget.
    */
   private function buildAttributes() {
-    $icon_style = !empty($this->settings['icon_style']) ? $this->settings['icon_style'] : variable_get('sharemessage_default_icon_style', 'addthis_16x16_style');
+    $icon_style = $this->getIconStyle();
+
     return array(
-      'class' => array('addthis_toolbox', 'addthis_default_style', $icon_style),
+      'class' => array('addthis_toolbox', $this->getAddthisStyleClass($icon_style), $icon_style),
     );
   }
 
@@ -185,6 +186,9 @@ class ShareMessage extends Entity {
   private function build_services_part($context) {
     $services = !empty($this->settings['services']) ? $this->settings['services'] : variable_get('sharemessage_default_services', array());
 
+    // Get some additional namespaced button attributes.
+    $namespace_attributes = $this->getNameSpaceAttributes($this->getIconStyle());
+
     // Configured.
     $services_HTML = '';
     if (!empty($services)) {
@@ -193,7 +197,8 @@ class ShareMessage extends Entity {
           // @todo. This doesn't work, should be printed here.
           drupal_add_js("var addthis_share = { templates: { twitter: '" . $this->getTokenizedField('sharemessage_short', $context) . "', } }", array('type' => 'inline'));
         }
-        $services_HTML .= '<a class="addthis_button_' . $key . '"></a>';
+        $namespace_attribute = !empty($namespace_attributes[$key]) ? $namespace_attributes[$key] : '';
+        $services_HTML .= '<a class="addthis_button_' . $key . '" ' . $namespace_attribute . '></a>';
       }
     }
     else {
@@ -233,13 +238,79 @@ class ShareMessage extends Entity {
     $additional_services = isset($this->settings['additional_services']) ? $this->settings['additional_services'] : variable_get('sharemessage_default_additional_services', TRUE);
 
     $additional = '';
-    if ($additional_services) {
+    if ($additional_services && $this->getIconStyle() != 'addthis_counter_style') {
       $additional .= '<a class="addthis_button_compact"></a>';
     }
     $counter = isset($this->settings['counter']) ? $this->settings['counter'] : variable_get('sharemessage_default_counter', FALSE);
     if ($counter) {
       $additional .= '<a class="addthis_counter ' . $counter . '"></a>';
     }
+    elseif ($this->getIconStyle() == 'addthis_counter_style' && !empty($this->settings['additional_services'])) {
+      $additional .= '<a class="addthis_counter"></a>';
+    }
     return $additional;
   }
+
+  /**
+   * Getter for the style category class of addthis widgets.
+   *
+   * @param string $icon_style
+   *   The icon style to find the style class for.
+   *
+   * @return string
+   *   The addthis style category CSS class.
+   */
+  protected function getAddthisStyleClass($icon_style) {
+    // @todo there are more styles to cover in this map.
+    $styles_map = array(
+      'addthis_default_style' => array(
+         'addthis_16x16_style',
+         'addthis_32x32_style',
+      ),
+      'addthis_floating_style' => array(
+        'addthis_counter_style',
+      ),
+    );
+
+    // Find the match for the given icon style.
+    foreach ($styles_map as $addthis_style_class => $styles) {
+      if (in_array($icon_style, $styles)) {
+        return $addthis_style_class;
+      }
+    }
+
+    // Fallback to the default if no class in the map was matched.
+    return 'addthis_default_style';
+  }
+
+  /**
+   * Getter for additional button attributes.
+   *
+   * @param string $icon_style
+   *   The used icon style of the sharemessage.
+   *
+   * @return array
+   *   Array of namespace attributes keyed by service name.
+   */
+  protected function getNamespaceAttributes($icon_style) {
+    // Floating counter style attributes.
+    if ($icon_style == 'addthis_counter_style') {
+      return array(
+        'facebook_like' => 'fb:like:layout="box_count"',
+        'tweet' => 'tw:count="vertical"',
+        'google_plusone' => 'g:plusone:size="tall"',
+      );
+    }
+
+    // Default attributes.
+    return array(
+      'facebook_like' => 'fb:like:layout="button_count"',
+      'pinterest_pinit' => 'pi:pinit:layout="horizontal"',
+    );
+  }
+
+  protected function getIconStyle() {
+    return !empty($this->settings['icon_style']) ? $this->settings['icon_style'] : variable_get('sharemessage_default_icon_style', 'addthis_16x16_style');
+  }
+
 }

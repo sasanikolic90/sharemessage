@@ -200,12 +200,12 @@ class ShareMessageSettingsTestCase extends ShareMessageTestCase {
     // Step 3: Verify that settings are overridden
     // (services, additional_services and icon_style).
     $this->drupalGet('sharemessage-test/1');
-    $raw_html_services = '<a class="addthis_button_facebook_like"></a>';
     $raw_html_additional_services = '<a class="addthis_button_compact"></a>';
     $raw_html_icon_style = '<div class="addthis_toolbox addthis_default_style ' . $sharemessage['settings[icon_style]'] . '"';
 
     // Check services (facebook_like button should not be displayed).
-    $this->assertNoRaw($raw_html_services, t('Facebook like button that is globally enabled is not displayed on the page, so that the global settings are overridden.'));
+    $facebook_button = $this->xpath('//a[contains(@class,"addthis_button_facebook_like")]');
+    $this->assertEqual(empty($facebook_button), TRUE, t('Facebook like button that is globally enabled is not displayed on the page, so that the global settings are overridden.'));
 
     // Additional services should be displayed.
     $this->assertRaw($raw_html_additional_services, t('Additional services button is displayed, so that the global settings are overridden.'));
@@ -224,8 +224,9 @@ class ShareMessageSettingsTestCase extends ShareMessageTestCase {
     // Step 5: Check that addThis widget is displayed with default settings.
     $this->drupalGet('sharemessage-test/1');
 
+    $facebook_button = $this->xpath('//a[contains(@class,"addthis_button_facebook_like")]');
     // Check services (facebook_like button should be displayed).
-    $this->assertRaw($raw_html_services, t('Facebook like button is displayed as it is globally configured.'));
+    $this->assertTrue(!empty($facebook_button), t('Facebook like button is displayed as it is globally configured.'));
 
     // Additional services button should not be displayed.
     $this->assertNoRaw($raw_html_additional_services, t('Additional services buttion is not displayed as it is globally configured.'));
