@@ -55,10 +55,10 @@ class ShareMessageBlock extends BlockBase implements ContainerFactoryPluginInter
    * @param \Drupal\Core\Entity\EntityViewBuilderInterface $view_builder
    *   The entity view builder for sharemessage.
    */
-  public function __construct(array $configuration, $plugin_id, array $plugin_definition, EntityStorageControllerInterface $storage_controller, EntityViewBuilderInterface $view_builder) {
+  public function __construct(array $configuration, $plugin_id, array $plugin_definition, EntityStorageControllerInterface $storage_controller, Connection $connection) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->storageController = $storage_controller;
-    $this->viewBuilder = $view_builder;
+    $this->viewBuilder = \Drupal::entityManager()->getViewBuilder('sharemessage');
   }
 
   /**
@@ -69,8 +69,8 @@ class ShareMessageBlock extends BlockBase implements ContainerFactoryPluginInter
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('plugin.manager.entity')->getStorageController('sharemessage'),
-      $container->get('plugin.manager.entity')->getViewBuilder('sharemessage')
+      $container->get('entity.manager')->getStorageController('sharemessage'),
+      $container->get('database')
     );
   }
 
@@ -121,9 +121,8 @@ class ShareMessageBlock extends BlockBase implements ContainerFactoryPluginInter
    * {@inheritdoc}
    */
   public function build() {
-    // Load the selected feed.
+    // Only display the block if there are items to show.
     if ($sharemessage = $this->storageController->load($this->configuration['sharemessage'])) {
-      // Only display the block if there are items to show.
       return $this->viewBuilder->view($sharemessage);
     }
   }

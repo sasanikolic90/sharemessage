@@ -23,7 +23,8 @@ class ShareMessageViewBuilder extends EntityViewBuilder {
       return array();
     }
 
-    parent::buildContent($entities, $displays, $view_mode, $langcode);
+    // @todo this was working before 1 month but seems obsolete as of 05.12.2013
+    //parent::buildContent($entities, $displays, $view_mode, $langcode);
 
     foreach ($entities as $entity) {
       $profileid = \Drupal::config('sharemessage.settings')->get('sharemessage_addthis_profile_id');
