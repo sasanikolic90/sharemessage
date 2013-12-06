@@ -1,4 +1,0 @@
-name = ShareMessage Tests
-description = ShareMessage Tests Module.
-core = 7.x
-hidden = TRUE

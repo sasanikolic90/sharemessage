@@ -3,7 +3,7 @@
  * @file
  * Definition of Drupal\sharemessage\ShareMessageTestBase.
  */
-
+/*
 namespace Drupal\sharemessage\Tests;
 
 use Drupal\simpletest\WebTestBase;
@@ -14,7 +14,7 @@ class ShareMessageTestBase extends WebTestBase {
    * Modules to enable.
    *
    * @var array
-   */
+   *
   public static $modules = array('sharemessage', 'sharemessage_test');
 
   public static function getInfo() {
@@ -41,4 +41,4 @@ class ShareMessageTestBase extends WebTestBase {
     // Add profile ID to the global settings.
     \Drupal::config('sharemessage.settings')->set('sharemessage_addthis_profile_id', 'ra-5006849061326d1cl');
   }
-}
+}*/
