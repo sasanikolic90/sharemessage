@@ -31,7 +31,7 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *   },
  *   config_prefix = "sharemessage.sharemessage",
  *   links = {
- *     "edit-form" = "admin/structure/services/sharemessage/manage/{sharemessage}"
+ *     "edit-form" = "sharemessage.sharemessage_edit"
  *   }
  * )
  */
