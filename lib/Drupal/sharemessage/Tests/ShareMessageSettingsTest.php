@@ -10,7 +10,7 @@ use Drupal\simpletest\WebTestBase;
 
 class ShareMessageSettingsTest extends WebTestBase {
 
-  public static $modules = array('sharemessage', 'sharemessage_test');
+  public static $modules = array('sharemessage', 'sharemessage_test', 'block');
 
   public static function getInfo() {
     return array(
@@ -27,22 +27,21 @@ class ShareMessageSettingsTest extends WebTestBase {
 
     // Create an admin user.
     $permissions = array(
-      //'access administration pages',
-      //'administer blocks',
-      //'administer sharemessages',
-      //'view sharemessages',
-      'administer display modes'
+      'access administration pages',
+      'administer blocks',
+      'administer sharemessages',
+      'view sharemessages',
     );
 
     $admin_user = $this->drupalCreateUser($permissions);
-    //debug($admin_user);
     $this->drupalLogin($admin_user);
-/*
+
     // Add profile ID to the global settings.
     \Drupal::config('sharemessage.settings')->set('sharemessage_addthis_profile_id', 'ra-5006849061326d1cl');
 
     // Step 1: Setup default settings.
     $this->drupalGet('admin/config/services/sharemessage/settings');
+    debug('BLABLA');
     $default_settings = array(
       'sharemessage_default_services[]' => array(
         'facebook',
@@ -51,13 +50,13 @@ class ShareMessageSettingsTest extends WebTestBase {
       'sharemessage_default_additional_services' => FALSE,
       'sharemessage_default_icon_style' => 'addthis_16x16_style',
     );
-    $this->drupalPost(NULL, $default_settings, t('Save configuration'));
+    $this->drupalPostForm(NULL, $default_settings, t('Save configuration'));
 
     // Step 2: Create share message with customized settings.
     $this->drupalGet('admin/config/services/sharemessage/add');
     $sharemessage = array(
       'label' => 'ShareMessage Test Label',
-      'name' => 'sharemessage_test_label',
+      'id' => 'sharemessage_test_label',
       'override_default_settings' => 1,
       'settings[services][]' => array(
         'facebook',
@@ -65,7 +64,7 @@ class ShareMessageSettingsTest extends WebTestBase {
       'settings[additional_services]' => 1,
       'settings[icon_style]' => 'addthis_32x32_style',
     );
-    $this->drupalPost(NULL, $sharemessage, t('Save share message'));
+    $this->drupalPostForm(NULL, $sharemessage, t('Save'));
     $this->assertText(t('Message @label saved.', array('@label' => $sharemessage['label'])));
 
     // Step 3: Verify that settings are overridden
@@ -104,6 +103,5 @@ class ShareMessageSettingsTest extends WebTestBase {
     // Check icon style (should be addthis_16x16_style).
     $raw_html_default_icon_style = '<div class="addthis_toolbox addthis_default_style ' . $default_settings['sharemessage_default_icon_style'] . '"';
     $this->assertRaw($raw_html_default_icon_style, t('Default icon style is used.'));
-*/
   }
 }

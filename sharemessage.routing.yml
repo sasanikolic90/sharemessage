@@ -3,7 +3,7 @@ sharemessage.settings:
   defaults:
     _form: '\Drupal\sharemessage\Form\SettingsForm'
   requirements:
-    _permission: 'administer sharemessage entities'
+    _permission: 'administer sharemessages'
 
 sharemessage.sharemessage_add:
   path: '/admin/config/services/sharemessage/add'
@@ -24,7 +24,7 @@ sharemessage.sharemessage_list:
   defaults:
     _entity_list: 'sharemessage'
   requirements:
-    _permission: 'administer sharemessage entities'
+    _permission: 'administer sharemessages'
 
 sharemessage.sharemessage_delete:
   path: 'admin/structure/services/sharemessage/manage/{sharemessage}/delete'
