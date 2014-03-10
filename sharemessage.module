@@ -7,15 +7,16 @@
 use Drupal\sharemessage\Entity\ShareMessage;
 
 /**
- * Implements hook_menu().
+ * Implements hook_menu_link_defaults().
  */
-function sharemessage_menu() {
-  $items['admin/config/services/sharemessage'] = array(
-    'title' => 'ShareMessages',
+function sharemessage_menu_link_defaults() {
+  $links['sharemessage.list'] = array(
+    'link_title' => 'ShareMessages',
     'description' => 'Manage ShareMessages.',
+    'parent' => 'system.admin.config.services',
     'route_name' => 'sharemessage.sharemessage_list',
   );
-  return $items;
+  return $links;
 }
 
 /**
@@ -87,7 +88,7 @@ function sharemessage_get_addthis_services() {
   $options = &drupal_static(__FUNCTION__);
 
   if (!isset($options)) {
-    if ($cache = \Drupal::cache()->get('sharemessage_addthis_services:' . \Drupal::languageManager()->getLanguage()->id)) {
+    if ($cache = \Drupal::cache()->get('sharemessage_addthis_services:' . \Drupal::languageManager()->getCurrentLanguage()->id)) {
       $options = $cache->data;
     }
     else {
@@ -110,10 +111,10 @@ function sharemessage_get_addthis_services() {
         $options[t('Common')]['tweet'] = t('Tweet');
         // Neither is Pinterest Follow.
         $options[t('Common')]['pinterest_follow'] = t('Pinterest follow');
-        \Drupal::cache()->set('sharemessage_addthis_services:' . \Drupal::languageManager()->getLanguage()->id, $options);
+        \Drupal::cache()->set('sharemessage_addthis_services:' . \Drupal::languageManager()->getCurrentLanguage()->id, $options);
       }
       else {
-        \Drupal::cache()->delete('sharemessage_addthis_services:' . \Drupal::languageManager()->getLanguage()->id);
+        \Drupal::cache()->delete('sharemessage_addthis_services:' . \Drupal::languageManager()->getCurrentLanguage()->id);
       }
     }
   }

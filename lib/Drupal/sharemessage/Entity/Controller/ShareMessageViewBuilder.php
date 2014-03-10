@@ -30,7 +30,7 @@ class ShareMessageViewBuilder extends EntityViewBuilder {
       $profileid = \Drupal::config('sharemessage.settings')->get('sharemessage_addthis_profile_id');
 
       $context = array('sharemessage' => $entity);
-      if ($node = menu_get_object()) {
+      if ($node = \Drupal::request()->attributes->get('node')) {
         $context['node'] = $node;
       }
 

@@ -2,4 +2,3 @@ name: 'ShareMessage Tests'
 type: module
 description: 'ShareMessage Tests Module.'
 core: 8.x
-hidden: TRUE

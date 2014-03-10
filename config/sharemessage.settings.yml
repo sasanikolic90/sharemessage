@@ -1,6 +1,6 @@
-sharemessage_addthis_profile_id: ''
-sharemessage_default_additional_services: TRUE
-sharemessage_default_counter: FALSE
-sharemessage_default_icon_style: 'addthis_16x16_style'
-sharemessage_message_enforcement: TRUE
-sharemessage_local_services_definition: FALSE
+addthis_profile_id: ''
+additional_services: TRUE
+counter: FALSE
+icon_style: 'addthis_16x16_style'
+message_enforcement: TRUE
+local_services_definition: FALSE

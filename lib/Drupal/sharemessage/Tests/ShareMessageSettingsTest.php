@@ -1,16 +1,12 @@
 <?php
 /**
  * @file
- * Definition of Drupal\sharemessage\ShareMessageTest.
+ * Definition of Drupal\sharemessage\Tests\ShareMessageSettingsTest.
  */
 
 namespace Drupal\sharemessage\Tests;
 
-use Drupal\simpletest\WebTestBase;
-
-class ShareMessageSettingsTest extends WebTestBase {
-
-  public static $modules = array('sharemessage', 'sharemessage_test', 'block');
+class ShareMessageSettingsTest extends ShareMessageTestBase {
 
   public static function getInfo() {
     return array(
@@ -24,20 +20,6 @@ class ShareMessageSettingsTest extends WebTestBase {
    * Test case that check if default and sharemessage specific settings work correctly.
    */
   public function testShareMessageSettings() {
-
-    // Create an admin user.
-    $permissions = array(
-      'access administration pages',
-      'administer blocks',
-      'administer sharemessages',
-      'view sharemessages',
-    );
-
-    $admin_user = $this->drupalCreateUser($permissions);
-    $this->drupalLogin($admin_user);
-
-    // Add profile ID to the global settings.
-    \Drupal::config('sharemessage.settings')->set('sharemessage_addthis_profile_id', 'ra-5006849061326d1cl');
 
     // Step 1: Setup default settings.
     $this->drupalGet('admin/config/services/sharemessage/settings');
@@ -65,11 +47,11 @@ class ShareMessageSettingsTest extends WebTestBase {
       'settings[icon_style]' => 'addthis_32x32_style',
     );
     $this->drupalPostForm(NULL, $sharemessage, t('Save'));
-    $this->assertText(t('Message @label saved.', array('@label' => $sharemessage['label'])));
+    $this->assertText(t('ShareMessage @label has been added.', array('@label' => $sharemessage['label'])));
 
     // Step 3: Verify that settings are overridden
     // (services, additional_services and icon_style).
-    $this->drupalGet('sharemessage-test/1');
+    $this->drupalGet('sharemessage-test/sharemessage_test_label');
     $raw_html_services = '<a class="addthis_button_facebook_like"></a>';
     $raw_html_additional_services = '<a class="addthis_button_compact"></a>';
     $raw_html_icon_style = '<div class="addthis_toolbox addthis_default_style ' . $sharemessage['settings[icon_style]'] . '"';
@@ -84,15 +66,15 @@ class ShareMessageSettingsTest extends WebTestBase {
     $this->assertRaw($raw_html_icon_style, t('Icon style is changed to "' . $sharemessage['settings[icon_style]'] . '" so that the global settings are overridden.'));
 
     // Step 4: Uncheck "Override default settings" checkbox.
-    $this->drupalGet('admin/config/services/sharemessage/manage/' . $sharemessage['name']);
+    $this->drupalGet('admin/config/services/sharemessage/manage/' . $sharemessage['id']);
     $edit = array(
       'override_default_settings' => FALSE,
     );
-    $this->drupalPost(NULL, $edit, t('Save share message'));
-    $this->assertText(t('Message @label saved.', array('@label' => $sharemessage['label'])));
+    $this->drupalPostForm(NULL, $edit, t('Save'));
+    $this->assertText(t('ShareMessage @label has been updated.', array('@label' => $sharemessage['label'])));
 
     // Step 5: Check that addThis widget is displayed with default settings.
-    $this->drupalGet('sharemessage-test/1');
+    $this->drupalGet('sharemessage-test/sharemessage_test_label');
 
     // Check services (facebook_like button should be displayed).
     $this->assertRaw($raw_html_services, t('Facebook like button is displayed as it is globally configured.'));

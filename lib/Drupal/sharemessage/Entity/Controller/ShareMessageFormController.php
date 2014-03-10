@@ -159,7 +159,7 @@ class ShareMessageFormController extends EntityFormController {
       ),
     );
 
-    if ($defaults->get('sharemessage_message_enforcement')) {
+    if ($defaults->get('message_enforcement')) {
       $form['enforce_usage'] = array(
         '#type' => 'checkbox',
         '#title' => t('Enforce the usage of this share message on the page it points to'),
@@ -189,31 +189,36 @@ class ShareMessageFormController extends EntityFormController {
     return $form;
   }
 
-  /**
-   * Overrides Drupal\Core\Entity\EntityFormController::save().
-   */
-  public function save(array $form, array &$form_state) {
-    if (!$form_state['values']['override_default_settings']) {
-      $form_state['values']['settings'] = array();
+  public function buildEntity(array $form, array &$form_state) {
+    $sharemessage = parent::buildEntity($form, $form_state);
+    if (!$sharemessage->override_default_settings) {
+      $sharemessage->settings = array();
     }
 
     // Move the override field into the settings array.
-    if (\Drupal::config('sharemessage_message_enforcement')) {
-      $form_state['values']['settings']['enforce_usage'] = $form_state['values']['enforce_usage'];
-      unset($form_state['values']['enforce_usage']);
+    if (\Drupal::config('sharemessage.settings')->get('message_enforcement')) {
+      $sharemessage->settings['enforce_usage'] = $sharemessage->enforce_usage;
+      unset($sharemessage->enforce_usage);
     }
+    return $sharemessage;
+  }
 
+
+    /**
+   * Overrides Drupal\Core\Entity\EntityFormController::save().
+   */
+  public function save(array $form, array &$form_state) {
     $sharemessage = $this->entity;
     $status = $sharemessage->save();
 
-    $uri = $sharemessage->uri();
+    $url = $sharemessage->url();
     if ($status == SAVED_UPDATED) {
       drupal_set_message(t('ShareMessage %label has been updated.', array('%label' => $sharemessage->label())));
-      watchdog('contact', 'ShareMessage %label has been updated.', array('%label' => $sharemessage->label()), WATCHDOG_NOTICE, l(t('Edit'), $uri['path'] . '/edit'));
+      watchdog('contact', 'ShareMessage %label has been updated.', array('%label' => $sharemessage->label()), WATCHDOG_NOTICE, l(t('Edit'), $url . '/edit'));
     }
     else {
       drupal_set_message(t('ShareMessage %label has been added.', array('%label' => $sharemessage->label())));
-      watchdog('contact', 'ShareMessage %label has been added.', array('%label' => $sharemessage->label()), WATCHDOG_NOTICE, l(t('Edit'), $uri['path'] . '/edit'));
+      watchdog('contact', 'ShareMessage %label has been added.', array('%label' => $sharemessage->label()), WATCHDOG_NOTICE, l(t('Edit'), $url . '/edit'));
     }
 
     $form_state['redirect'] = 'admin/config/services/sharemessage/list';

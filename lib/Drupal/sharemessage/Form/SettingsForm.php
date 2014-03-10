@@ -95,14 +95,15 @@ class SettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, array &$form_state) {
     $this->configFactory->get('sharemessage.settings')
-      ->set('sharemessage_addthis_profile_id', $form_state['values']['sharemessage_addthis_profile_id'])
-      ->set('sharemessage_default_services', $form_state['values']['sharemessage_default_services'])
-      ->set('sharemessage_default_additional_services', $form_state['values']['sharemessage_default_additional_services'])
-      ->set('sharemessage_default_counter', $form_state['values']['sharemessage_default_counter'])
-      ->set('sharemessage_default_icon_style', $form_state['values']['sharemessage_default_icon_style'])
-      ->set('sharemessage_message_enforcement', $form_state['values']['sharemessage_message_enforcement'])
-      ->set('sharemessage_local_services_definition', $form_state['values']['sharemessage_local_services_definition'])
+      ->set('addthis_profile_id', $form_state['values']['sharemessage_addthis_profile_id'])
+      ->set('services', $form_state['values']['sharemessage_default_services'])
+      ->set('additional_services', $form_state['values']['sharemessage_default_additional_services'])
+      ->set('counter', $form_state['values']['sharemessage_default_counter'])
+      ->set('icon_style', $form_state['values']['sharemessage_default_icon_style'])
+      ->set('message_enforcement', $form_state['values']['sharemessage_message_enforcement'])
+      ->set('local_services_definition', $form_state['values']['sharemessage_local_services_definition'])
       ->save();
-  }
 
+    drupal_set_message(t('ShareMessage settings have been updated.'));
+  }
 }

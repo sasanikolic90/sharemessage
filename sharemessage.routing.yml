@@ -1,6 +1,7 @@
 sharemessage.settings:
   path: '/admin/config/services/sharemessage/settings'
   defaults:
+    _title: 'Share message settings'
     _form: '\Drupal\sharemessage\Form\SettingsForm'
   requirements:
     _permission: 'administer sharemessages'
@@ -8,13 +9,15 @@ sharemessage.settings:
 sharemessage.sharemessage_add:
   path: '/admin/config/services/sharemessage/add'
   defaults:
+    _title: 'Add new share message'
     _entity_form: sharemessage.add
   requirements:
     _entity_create_access: sharemessage
 
 sharemessage.sharemessage_edit:
-  path: 'admin/structure/services/sharemessage/manage/{sharemessage}'
+  path: 'admin/config/services/sharemessage/manage/{sharemessage}'
   defaults:
+    _title: 'Edit share message'
     _entity_form: sharemessage.edit
   requirements:
     _entity_access: sharemessage.update
@@ -22,13 +25,14 @@ sharemessage.sharemessage_edit:
 sharemessage.sharemessage_list:
   path: '/admin/config/services/sharemessage/list'
   defaults:
+    _title: 'Share message list'
     _entity_list: 'sharemessage'
   requirements:
     _permission: 'administer sharemessages'
 
 sharemessage.sharemessage_delete:
-  path: 'admin/structure/services/sharemessage/manage/{sharemessage}/delete'
+  path: 'admin/config/services/sharemessage/manage/{sharemessage}/delete'
   defaults:
     _entity_form: sharemessage.delete
   requirements:
-    _entity_access: sharemessage.update
+    _entity_access: sharemessage.delete
