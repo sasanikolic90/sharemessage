@@ -108,7 +108,7 @@ class ShareMessageFormController extends EntityFormController {
       '#title' => t('Visible services'),
       '#multiple' => TRUE,
       '#options' => sharemessage_get_addthis_services(),
-      '#default_value' => !empty($sharemessage->settings['services']) ? $sharemessage->settings['services'] : $defaults->get('sharemessage_default_services'),
+      '#default_value' => !empty($sharemessage->settings['services']) ? $sharemessage->settings['services'] : $defaults->get('services'),
       '#size' => 10,
       '#states' => array(
         'invisible' => array(

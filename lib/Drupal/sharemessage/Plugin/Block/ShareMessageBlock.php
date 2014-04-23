@@ -8,11 +8,7 @@
 namespace Drupal\sharemessage\Plugin\Block;
 
 use Drupal\block\BlockBase;
-use Drupal\block\Annotation\Block;
-use Drupal\Core\Annotation\Translation;
-use Drupal\Core\Database\Connection;
-use Drupal\Core\Entity\EntityStorageControllerInterface;
-use Drupal\Core\Entity\EntityViewBuilderInterface;
+use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -22,15 +18,15 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @Block(
  *   id = "sharemessage_block",
- *   admin_label = @Translation("ShareMessage")
+ *   admin_label = @Translation("Share message")
  * )
  */
 class ShareMessageBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
-   * The entity storage controller for feeds.
+   * The entity storage controller for share messages.
    *
-   * @var \Drupal\Core\Entity\EntityStorageControllerInterface
+   * @var \Drupal\Core\Entity\EntityStorageInterface
    */
   protected $storageController;
 
@@ -50,27 +46,24 @@ class ShareMessageBlock extends BlockBase implements ContainerFactoryPluginInter
    *   The plugin_id for the plugin instance.
    * @param array $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\Core\Entity\EntityStorageControllerInterface $storage_controller
-   *   The entity storage controller for feeds.
-   * @param \Drupal\Core\Entity\EntityViewBuilderInterface $view_builder
-   *   The entity view builder for sharemessage.
+   * @param \Drupal\Core\Entity\EntityManagerInterface $entity_manager
+   *   The entity manager.
    */
-  public function __construct(array $configuration, $plugin_id, array $plugin_definition, EntityStorageControllerInterface $storage_controller, Connection $connection) {
+  public function __construct(array $configuration, $plugin_id, array $plugin_definition, EntityManagerInterface $entity_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->storageController = $storage_controller;
-    $this->viewBuilder = \Drupal::entityManager()->getViewBuilder('sharemessage');
+    $this->storageController = $entity_manager->getStorage('sharemessage');
+    $this->viewBuilder = $entity_manager->getViewBuilder('sharemessage');
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, array $plugin_definition) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     return new static(
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('entity.manager')->getStorageController('sharemessage'),
-      $container->get('database')
+      $container->get('entity.manager')
     );
   }
 
@@ -93,7 +86,7 @@ class ShareMessageBlock extends BlockBase implements ContainerFactoryPluginInter
   }
 
   /**
-   * Overrides \Drupal\block\BlockBase::blockForm().
+   * {@inheritdoc}
    */
   public function blockForm($form, &$form_state) {
     $sharemessages = $this->storageController->loadMultiple();
@@ -111,7 +104,7 @@ class ShareMessageBlock extends BlockBase implements ContainerFactoryPluginInter
   }
 
   /**
-   * Overrides \Drupal\block\BlockBase::blockSubmit().
+   * {@inheritdoc}
    */
   public function blockSubmit($form, &$form_state) {
     $this->configuration['sharemessage'] = $form_state['values']['sharemessage'];

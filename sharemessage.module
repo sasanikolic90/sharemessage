@@ -56,7 +56,7 @@ function sharemessage_delete_multiple($smids) {
  *   TRUE if sharemessage with given name exists, FALSE otherwise.
  */
 function sharemessage_check_machine_name_if_exist($value) {
-  return \Drupal::entityManager()->getStorageController('sharemessage')->load($value);
+  return \Drupal::entityManager()->getStorage('sharemessage')->load($value);
 }
 
 /**
@@ -115,7 +115,7 @@ function sharemessage_get_addthis_services() {
  */
 function sharemessage_init() {
   $smid = \Drupal::request()->get('smid');
-  if (!empty($smid) && \Drupal::config('sharemessage.settings')->get('sharemessage_message_enforcement')) {
+  if (!empty($smid) && \Drupal::config('sharemessage.settings')->get('message_enforcement')) {
     $sharemessage = sharemessage_load($smid);
     if ($sharemessage) {
       entity_view($sharemessage, 'only_og_tags');
@@ -133,7 +133,7 @@ function sharemessage_init() {
  *   The path to the services definition file.
  */
 function sharemessage_get_services_json() {
-  if (\Drupal::config('sharemessage.settings')->get('sharemessage_local_services_definition')) {
+  if (\Drupal::config('sharemessage.settings')->get('local_services_definition')) {
     $file_uri = drupal_get_path('module', 'sharemessage') . '/addthis/sharing.en.json';
   }
   else {

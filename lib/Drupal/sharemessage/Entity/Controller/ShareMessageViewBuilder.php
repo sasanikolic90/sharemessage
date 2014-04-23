@@ -27,7 +27,7 @@ class ShareMessageViewBuilder extends EntityViewBuilder {
     //parent::buildContent($entities, $displays, $view_mode, $langcode);
 
     foreach ($entities as $entity) {
-      $profileid = \Drupal::config('sharemessage.settings')->get('sharemessage_addthis_profile_id');
+      $profileid = \Drupal::config('sharemessage.settings')->get('addthis_profile_id');
 
       $context = array('sharemessage' => $entity);
       if ($node = \Drupal::request()->attributes->get('node')) {
@@ -158,7 +158,7 @@ class ShareMessageViewBuilder extends EntityViewBuilder {
    * Function that adds icon style as part of addThis widget.
    */
   private function buildAttributes($entity) {
-    $icon_style = !empty($entity->settings['icon_style']) ? $entity->settings['icon_style'] : \Drupal::config('sharemessage.settings')->get('sharemessage_default_icon_style');
+    $icon_style = !empty($entity->settings['icon_style']) ? $entity->settings['icon_style'] : \Drupal::config('sharemessage.settings')->get('icon_style');
     return array(
       'class' => array('addthis_toolbox', 'addthis_default_style', $icon_style),
     );
@@ -170,7 +170,7 @@ class ShareMessageViewBuilder extends EntityViewBuilder {
    */
   function buildAdditionalAttributes($entity, $context) {
     $attributes = $this->buildAttributes($entity);
-    $attributes['addthis:url'] = $this->getUrl($$entity, $context);
+    $attributes['addthis:url'] = $this->getUrl($entity, $context);
     $attributes['addthis:title'] = $this->getTokenizedField($entity->title, $context);
     $attributes['addthis:description'] = $this->getTokenizedField($entity->message_long, $context);
     return $attributes;
@@ -197,7 +197,7 @@ class ShareMessageViewBuilder extends EntityViewBuilder {
    * Function that adds services as part of addThis widget.
    */
   private function build_services_part($entity, $context) {
-    $services = !empty($entity->settings['services']) ? $entity->settings['services'] : \Drupal::config('sharemessage.settings')->get('sharemessage_default_services');
+    $services = !empty($entity->settings['services']) ? $entity->settings['services'] : \Drupal::config('sharemessage.settings')->get('services');
 
     // Configured.
     // @todo render this as render array and attach js using #attached property.
@@ -206,7 +206,7 @@ class ShareMessageViewBuilder extends EntityViewBuilder {
       foreach ($services as $key => $service) {
         if ($key == 'twitter' && $entity->message_short) {
           // @todo. This doesn't work, should be printed here.
-          drupal_add_js("var addthis_share = { templates: { twitter: '" . $this->getTokenizedField($entity->message_short, $context) . "', } }", array('type' => 'inline'));
+          _drupal_add_js("var addthis_share = { templates: { twitter: '" . $this->getTokenizedField($entity->message_short, $context) . "', } }", array('type' => 'inline'));
         }
         $services_HTML .= '<a class="addthis_button_' . $key . '"></a>';
       }
@@ -245,13 +245,13 @@ class ShareMessageViewBuilder extends EntityViewBuilder {
    * Function that adds additional services as part of addThis widget.
    */
   private function build_additional_services_part($entity) {
-    $additional_services = isset($entity->settings['additional_services']) ? $entity->settings['additional_services'] : \Drupal::config('sharemessage.settings')->get('sharemessage_default_additional_services');
+    $additional_services = isset($entity->settings['additional_services']) ? $entity->settings['additional_services'] : \Drupal::config('sharemessage.settings')->get('additional_services');
 
     $additional = '';
     if ($additional_services) {
       $additional .= '<a class="addthis_button_compact"></a>';
     }
-    $counter = isset($entity->settings['counter']) ? $entity->settings['counter'] : \Drupal::config('sharemessage.settings')->get('sharemessage_default_counter');
+    $counter = isset($entity->settings['counter']) ? $entity->settings['counter'] : \Drupal::config('sharemessage.settings')->get('counter');
     if ($counter) {
       $additional .= '<a class="addthis_counter ' . $counter . '"></a>';
     }
