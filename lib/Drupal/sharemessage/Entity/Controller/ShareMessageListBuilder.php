@@ -1,21 +1,21 @@
 <?php
 
 /**
- * Definition of Drupal\sharemessage\Entity\Controller\ShareMessageListController.
+ * Contains \Drupal\sharemessage\Entity\Controller\ShareMessageListBuilder.
  */
 
 namespace Drupal\sharemessage\Entity\Controller;
 
-use Drupal\Core\Config\Entity\ConfigEntityListController;
+use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
 use Drupal\Core\Entity\EntityInterface;
 
 /**
  * Provides a listing of ShareMessages.
  */
-class ShareMessageListController extends ConfigEntityListController {
+class ShareMessageListBuilder extends ConfigEntityListBuilder {
 
   /**
-   * Overrides Drupal\Core\Entity\EntityListController::buildHeader().
+   * {@inheritdoc}
    */
   public function buildHeader() {
     $header['label'] = t('Label');
@@ -23,7 +23,7 @@ class ShareMessageListController extends ConfigEntityListController {
   }
 
   /**
-   * Overrides Drupal\Core\Entity\EntityListController::buildRow().
+   * {@inheritdoc}
    */
   public function buildRow(EntityInterface $entity) {
     $row['label'] = $this->getLabel($entity);

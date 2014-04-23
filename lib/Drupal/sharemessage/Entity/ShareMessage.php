@@ -15,10 +15,10 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *   id = "sharemessage",
  *   label = @Translation("ShareMessage"),
  *   controllers = {
- *     "storage" = "Drupal\Core\Config\Entity\ConfigStorageController",
+ *     "storage" = "Drupal\Core\Config\Entity\ConfigEntityStorage",
  *     "access" = "Drupal\sharemessage\Entity\Controller\ShareMessageAccessController",
  *     "view_builder" = "Drupal\sharemessage\Entity\Controller\ShareMessageViewBuilder",
- *     "list" = "Drupal\sharemessage\Entity\Controller\ShareMessageListController",
+ *     "list_builder" = "Drupal\sharemessage\Entity\Controller\ShareMessageListBuilder",
  *     "form" = {
  *       "add" = "Drupal\sharemessage\Entity\Controller\ShareMessageFormController",
  *       "edit" = "Drupal\sharemessage\Entity\Controller\ShareMessageFormController",
