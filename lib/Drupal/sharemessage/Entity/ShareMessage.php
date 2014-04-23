@@ -9,13 +9,12 @@ namespace Drupal\sharemessage\Entity;
 use Drupal\Core\Config\Entity\ConfigEntityBase;
 
 /**
- * Entity class for the ShareMessage entity.
+ * Entity class for the Share Message entity.
  *
- * @EntityType(
+ * @ConfigEntityType(
  *   id = "sharemessage",
- *   label = @Translation("ShareMessage"),
+ *   label = @Translation("Share Message"),
  *   controllers = {
- *     "storage" = "Drupal\Core\Config\Entity\ConfigEntityStorage",
  *     "access" = "Drupal\sharemessage\Entity\Controller\ShareMessageAccessController",
  *     "view_builder" = "Drupal\sharemessage\Entity\Controller\ShareMessageViewBuilder",
  *     "list_builder" = "Drupal\sharemessage\Entity\Controller\ShareMessageListBuilder",
@@ -29,7 +28,6 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *     "id" = "id",
  *     "label" = "label"
  *   },
- *   config_prefix = "sharemessage.sharemessage",
  *   links = {
  *     "edit-form" = "sharemessage.sharemessage_edit"
  *   }
