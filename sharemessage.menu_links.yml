@@ -1,0 +1,5 @@
+sharemessage.list:
+  title: Share messages
+  description: 'Manage share messages.'
+  route_name: sharemessage.sharemessage_list
+  parent: system.admin.config.services

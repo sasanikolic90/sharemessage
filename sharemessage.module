@@ -4,20 +4,8 @@
  * @file
  * New Sharing Module.
  */
-use Drupal\sharemessage\Entity\ShareMessage;
 
-/**
- * Implements hook_menu_link_defaults().
- */
-function sharemessage_menu_link_defaults() {
-  $links['sharemessage.list'] = array(
-    'link_title' => 'ShareMessages',
-    'description' => 'Manage ShareMessages.',
-    'parent' => 'system.admin.config.services',
-    'route_name' => 'sharemessage.sharemessage_list',
-  );
-  return $links;
-}
+use Drupal\sharemessage\Entity\ShareMessage;
 
 /**
  * Implements hook_permission().
