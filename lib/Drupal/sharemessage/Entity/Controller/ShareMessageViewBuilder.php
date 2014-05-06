@@ -7,8 +7,8 @@
 
 namespace Drupal\sharemessage\Entity\Controller;
 
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityViewBuilder;
-use Symfony\Component\Validator\Tests\Fixtures\EntityInterface;
 
 /**
  * Render controller for nodes.
@@ -16,9 +16,17 @@ use Symfony\Component\Validator\Tests\Fixtures\EntityInterface;
 class ShareMessageViewBuilder extends EntityViewBuilder {
 
   /**
-   * Overrides Drupal\Core\Entity\EntityRenderController::buildContent().
+   * {@inheritdoc}
    */
-  public function buildContent(array $entities, array $displays, $view_mode, $langcode = NULL) {
+  public function view(EntityInterface $entity, $view_mode = 'full', $langcode = NULL) {
+    $build = $this->viewMultiple(array($entity), $view_mode, $langcode);
+    return reset($build);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function viewMultiple(array $entities = array(), $view_mode = 'full', $langcode = NULL) {
     if (empty($entities)) {
       return array();
     }
@@ -26,6 +34,7 @@ class ShareMessageViewBuilder extends EntityViewBuilder {
     // @todo this was working before 1 month but seems obsolete as of 05.12.2013
     //parent::buildContent($entities, $displays, $view_mode, $langcode);
 
+    $build = array();
     foreach ($entities as $entity) {
       $profileid = \Drupal::config('sharemessage.settings')->get('addthis_profile_id');
 
@@ -50,14 +59,14 @@ class ShareMessageViewBuilder extends EntityViewBuilder {
 
       // Add addThis buttons.
       if ($view_mode == 'full') {
-        $entity->content['addthis'] = array(
+        $build[$entity->id()]['addthis'] = array(
           '#type' => 'container',
           '#attributes' => $addThis_attributes ? $this->buildAdditionalAttributes($entity, $context) : $this->buildAttributes($entity),
           'services' => array(
-            '#markup' => $this->build_services_part($entity, $context),
+            '#markup' => $this->buildServicesPart($entity, $context),
           ),
           'additional_services' => array(
-            '#markup' => $this->build_additional_services_part($entity),
+            '#markup' => $this->buildAdditionalServicesPart($entity),
           ),
           'addthis_js' => array(
             '#attached' => array(
@@ -80,6 +89,7 @@ class ShareMessageViewBuilder extends EntityViewBuilder {
         );
       }
     }
+    return $build;
   }
 
   /**
@@ -196,7 +206,7 @@ class ShareMessageViewBuilder extends EntityViewBuilder {
   /**
    * Function that adds services as part of addThis widget.
    */
-  private function build_services_part($entity, $context) {
+  private function buildServicesPart($entity, $context) {
     $services = !empty($entity->settings['services']) ? $entity->settings['services'] : \Drupal::config('sharemessage.settings')->get('services');
 
     // Configured.
@@ -244,7 +254,7 @@ class ShareMessageViewBuilder extends EntityViewBuilder {
   /**
    * Function that adds additional services as part of addThis widget.
    */
-  private function build_additional_services_part($entity) {
+  private function buildAdditionalServicesPart($entity) {
     $additional_services = isset($entity->settings['additional_services']) ? $entity->settings['additional_services'] : \Drupal::config('sharemessage.settings')->get('additional_services');
 
     $additional = '';

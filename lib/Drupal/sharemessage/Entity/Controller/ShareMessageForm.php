@@ -7,12 +7,12 @@
 
 namespace Drupal\sharemessage\Entity\Controller;
 
-use Drupal\Core\Entity\EntityFormController;
+use Drupal\Core\Entity\EntityForm;
 
 /**
  * Base form controller for ShareMessage edit forms.
  */
-class ShareMessageFormController extends EntityFormController {
+class ShareMessageForm extends EntityForm {
 
   /**
    * Overrides Drupal\Core\Entity\EntityFormController::form().

@@ -19,8 +19,8 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *     "view_builder" = "Drupal\sharemessage\Entity\Controller\ShareMessageViewBuilder",
  *     "list_builder" = "Drupal\sharemessage\Entity\Controller\ShareMessageListBuilder",
  *     "form" = {
- *       "add" = "Drupal\sharemessage\Entity\Controller\ShareMessageFormController",
- *       "edit" = "Drupal\sharemessage\Entity\Controller\ShareMessageFormController",
+ *       "add" = "Drupal\sharemessage\Entity\Controller\ShareMessageForm",
+ *       "edit" = "Drupal\sharemessage\Entity\Controller\ShareMessageForm",
  *       "delete" = "Drupal\sharemessage\Entity\Controller\ShareMessageDeleteForm"
  *     }
  *   },
