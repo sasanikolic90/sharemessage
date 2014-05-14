@@ -18,7 +18,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @Block(
  *   id = "sharemessage_block",
- *   admin_label = @Translation("Share message")
+ *   admin_label = @Translation("Share message"),
+ *   category = @Translation("Sharing"),
  * )
  */
 class ShareMessageBlock extends BlockBase implements ContainerFactoryPluginInterface {
@@ -118,6 +119,15 @@ class ShareMessageBlock extends BlockBase implements ContainerFactoryPluginInter
     if ($sharemessage = $this->storageController->load($this->configuration['sharemessage'])) {
       return $this->viewBuilder->view($sharemessage);
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function calculateDependencies() {
+    return array(
+      'entity' => 'sharemessage.sharemessage.' . $this->configuration['sharemessage'],
+    );
   }
 
 }
