@@ -50,6 +50,15 @@ function sharemessage_entity_info() {
           'custom settings' => FALSE,
         ),
       ),
+      'bundles' => array(
+        'sharemessage' => array(
+          'label' => t('Sharemessage'),
+          'admin' => array(
+            'path' => 'admin/config/services/sharemessage',
+            'access arguments' => array('administer sharemessage entities'),
+          ),
+        ),
+      ),
       'admin ui' => array(
         'controller class' => 'ShareMessageUIController',
         'path' => 'admin/config/services/sharemessage',
@@ -62,10 +71,51 @@ function sharemessage_entity_info() {
           'path wildcard' => '%sharemessage',
         ),
       ),
+      'field replacement' => array(
+        'label' => array(
+          'field' => array(
+            'type' => 'text',
+            'cardinality' => 1,
+            'translatable' => TRUE,
+          ),
+          'instance' => array(
+              'label' => t('Label'),
+              'description' => '',
+              'required' => TRUE,
+              'settings' => array(
+                'text_processing' => 0,
+              ),
+              'widget' => array(
+                'weight' => -5,
+              ),
+              'display' => array(
+                'default' => array(
+                  'type' => 'hidden',
+                ),
+              ),
+            ),
+        ),
+      ),
     ),
   );
 
   return $entities;
+}
+
+/**
+ * Implements hook_field_extra_fields().
+ */
+function sharemessage_field_extra_fields() {
+  $extra['sharemessage']['sharemessage'] = array(
+    'form' => array(
+      'label' => array(
+        'label' => t('Label'),
+        'weight' => -5,
+      ),
+    ),
+  );
+
+  return $extra;
 }
 
 /**
