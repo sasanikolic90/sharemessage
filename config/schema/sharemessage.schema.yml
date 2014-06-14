@@ -1,0 +1,33 @@
+
+sharemessage.sharemessage.*:
+  type: config_entity
+  label: 'Share message'
+  mapping:
+    id:
+      type: string
+      label: 'Machine-readable name'
+    label:
+      type: label
+      label: 'Label'
+    override_default_settings:
+      type: boolean
+      label: 'Override default settings'
+    title:
+      type: label
+      label: 'Title'
+    message_long:
+      type: label
+      label: 'Long message'
+    message_short:
+      type: label
+      label: 'Short message'
+    image_url:
+      type: string
+      label: 'Image URL'
+    share_url:
+      type: string
+      label: 'Share URL'
+    settings:
+      type: mapping
+      label: 'Settings'
+      mapping:

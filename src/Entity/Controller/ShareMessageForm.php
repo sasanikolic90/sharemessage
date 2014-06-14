@@ -56,7 +56,7 @@ class ShareMessageForm extends EntityForm {
       '#type' => 'textarea',
       '#title' => t('Long Description'),
       '#default_value' => $sharemessage->message_long,
-      '#description' => t('Used as long description for the share message, where applicable: Facebook, E-mail body, ...'),
+      '#description' => t('Used as long description for the share message, where applicable: Facebook, Email body, ...'),
       '#weight' => 10,
     );
 
