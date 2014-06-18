@@ -81,7 +81,7 @@ class ShareMessageBlock extends BlockBase implements ContainerFactoryPluginInter
   /**
    * {@inheritdoc}
    */
-  public function access(AccountInterface $account) {
+  public function blockAccess(AccountInterface $account) {
     // Only grant access to users with the 'access news feeds' permission.
     return $account->hasPermission('view sharemessages');
   }
