@@ -21,6 +21,7 @@ class ShareMessageTestBase extends WebTestBase {
       'administer blocks',
       'administer sharemessages',
       'view sharemessages',
+      'administer themes'
     );
 
     $admin_user = $this->drupalCreateUser($permissions);
