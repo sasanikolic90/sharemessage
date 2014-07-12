@@ -8,7 +8,7 @@ namespace Drupal\sharemessage\Tests;
 
 use Drupal\simpletest\WebTestBase;
 
-class ShareMessageTestBase extends WebTestBase {
+abstract class ShareMessageTestBase extends WebTestBase {
 
   public static $modules = array('sharemessage', 'sharemessage_test', 'block');
 

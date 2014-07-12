@@ -6,17 +6,12 @@
 
 namespace Drupal\sharemessage\Tests;
 
-use Drupal\simpletest\WebTestBase;
-
+/**
+ * Check if sharemessage is exposed as block.
+ *
+ * @group Sharemessage
+ */
 class ShareMessageExposeToBlockTestCase extends ShareMessageTestBase {
-
-  public static function getInfo() {
-    return array(
-      'name' => 'ShareMessage blocks',
-      'description' => 'Check if sharemessage is exposed as block.',
-      'group' => 'ShareMessage',
-    );
-  }
 
   /**
    * Test case that check if sharemessage is exposed as block.

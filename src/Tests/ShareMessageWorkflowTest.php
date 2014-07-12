@@ -6,17 +6,12 @@
 
 namespace Drupal\sharemessage\Tests;
 
-use Drupal\simpletest\WebTestBase;
-
+/**
+ * Main sharemessage workflow through the admin UI.
+ *
+ * @group Sharemessage
+ */
 class ShareMessageWorkflowTest extends ShareMessageTestBase {
-
-  public static function getInfo() {
-    return array(
-      'name' => 'ShareMessage workflow',
-      'description' => 'Main sharemessage workflow through the admin UI.',
-      'group' => 'ShareMessage',
-    );
-  }
 
   /**
    * Main sharemessage workflow through the admin UI.

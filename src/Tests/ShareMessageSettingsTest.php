@@ -6,15 +6,12 @@
 
 namespace Drupal\sharemessage\Tests;
 
+/**
+ * Check if default and sharemessage specific settings work correctly.
+ *
+ * @group Sharemessage
+ */
 class ShareMessageSettingsTest extends ShareMessageTestBase {
-
-  public static function getInfo() {
-    return array(
-      'name' => 'ShareMessage settings',
-      'description' => 'Check if default and sharemessage specific settings work correctly.',
-      'group' => 'ShareMessage',
-    );
-  }
 
   /**
    * Test case that check if default and sharemessage specific settings work correctly.
