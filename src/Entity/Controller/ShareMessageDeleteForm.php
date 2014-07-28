@@ -24,7 +24,7 @@ class ShareMessageDeleteForm extends EntityConfirmFormBase {
   /**
    * {@inheritdoc}
    */
-  public function getCancelRoute() {
+  public function getCancelUrl() {
     return array(
       'route_name' => 'sharemessage.sharemessage_list',
     );
