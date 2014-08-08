@@ -8,6 +8,7 @@
 namespace Drupal\sharemessage\Entity\Controller;
 
 use Drupal\Core\Entity\EntityForm;
+use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Base form controller for ShareMessage edit forms.
@@ -17,7 +18,7 @@ class ShareMessageForm extends EntityForm {
   /**
    * Overrides Drupal\Core\Entity\EntityFormController::form().
    */
-  public function form(array $form, array &$form_state) {
+  public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
 
     $sharemessage = $this->entity;
@@ -189,7 +190,7 @@ class ShareMessageForm extends EntityForm {
     return $form;
   }
 
-  public function buildEntity(array $form, array &$form_state) {
+  public function buildEntity(array $form, FormStateInterface $form_state) {
     $sharemessage = parent::buildEntity($form, $form_state);
     if (!$sharemessage->override_default_settings) {
       $sharemessage->settings = array();
@@ -207,7 +208,7 @@ class ShareMessageForm extends EntityForm {
     /**
    * Overrides Drupal\Core\Entity\EntityFormController::save().
    */
-  public function save(array $form, array &$form_state) {
+  public function save(array $form, FormStateInterface $form_state) {
     $sharemessage = $this->entity;
     $status = $sharemessage->save();
 
@@ -220,15 +221,14 @@ class ShareMessageForm extends EntityForm {
       drupal_set_message(t('ShareMessage %label has been added.', array('%label' => $sharemessage->label())));
       watchdog('contact', 'ShareMessage %label has been added.', array('%label' => $sharemessage->label()), WATCHDOG_NOTICE, l(t('Edit'), $url . '/edit'));
     }
-
-    $form_state['redirect'] = 'admin/config/services/sharemessage/list';
+    $form_state->setRedirect('sharemessage.sharemessage_list');
   }
 
   /**
    * Overrides Drupal\Core\Entity\EntityFormController::delete().
    */
-  public function delete(array $form, array &$form_state) {
-    $form_state['redirect'] = 'admin/structure/services/sharemessage/' . $this->entity->id() . '/delete';
+  public function delete(array $form, FormStateInterface $form_state) {
+    $form_state->setRedirect('sharemessage.sharemessage_edit', array('sharemessage' => $this->entity->id()));
   }
 
 }

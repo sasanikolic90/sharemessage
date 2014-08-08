@@ -9,6 +9,7 @@ namespace Drupal\sharemessage\Plugin\Block;
 
 use Drupal\block\BlockBase;
 use Drupal\Core\Entity\EntityManagerInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -89,7 +90,7 @@ class ShareMessageBlock extends BlockBase implements ContainerFactoryPluginInter
   /**
    * {@inheritdoc}
    */
-  public function blockForm($form, &$form_state) {
+  public function blockForm($form, FormStateInterface $form_state) {
     $sharemessages = $this->storageController->loadMultiple();
     $options = array();
     foreach ($sharemessages as $sharemessage) {
@@ -107,7 +108,7 @@ class ShareMessageBlock extends BlockBase implements ContainerFactoryPluginInter
   /**
    * {@inheritdoc}
    */
-  public function blockSubmit($form, &$form_state) {
+  public function blockSubmit($form, FormStateInterface $form_state) {
     $this->configuration['sharemessage'] = $form_state['values']['sharemessage'];
   }
 

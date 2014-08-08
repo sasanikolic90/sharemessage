@@ -2,4 +2,4 @@ name: ShareMessage
 type: module
 description: 'Sharing module using addthis widgets and entity based storage.'
 core: 8.x
-configure: admin/config/services/sharemessage/settings
+configure: sharemessage.settings

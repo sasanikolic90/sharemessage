@@ -8,6 +8,7 @@
 namespace Drupal\sharemessage\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\system\SystemConfigFormBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,7 +28,7 @@ class SettingsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, array &$form_state, Request $request = NULL) {
+  public function buildForm(array $form, FormStateInterface $form_state, Request $request = NULL) {
 
     $config = $this->configFactory->get('sharemessage.settings');
 
@@ -93,7 +94,7 @@ class SettingsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, array &$form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->configFactory->get('sharemessage.settings')
       ->set('addthis_profile_id', $form_state['values']['addthis_profile_id'])
       ->set('services', $form_state['values']['default_services'])
