@@ -77,6 +77,15 @@ class ShareMessageForm extends EntityForm {
       '#weight' => 20,
     );
 
+    // @todo: Convert this to a file upload/selection widget.
+    $form['fallback_image'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Fallback image (File UUID)'),
+      '#default_value' => $sharemessage->fallback_image,
+      '#description' => t('Specify a static fallback image that is used if the Image URL is empty (For example, when tokens are used and the specified image field is empty).'),
+      '#weight' => 23,
+    );
+
     $form['share_url'] = array(
       '#type' => 'textfield',
       '#title' => t('Shared URL'),

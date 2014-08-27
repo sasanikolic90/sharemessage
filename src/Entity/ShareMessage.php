@@ -92,6 +92,13 @@ class ShareMessage extends ConfigEntityBase {
   public $image_url;
 
   /**
+   * An optional fallback image as file UUID if the image URL does not resolve.
+   *
+   * @var string
+   */
+  public $fallback_image;
+
+  /**
    * Specific URL that will be shared, defaults to the current page
    *
    * @var string

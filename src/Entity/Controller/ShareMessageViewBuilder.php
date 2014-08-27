@@ -9,6 +9,7 @@ namespace Drupal\sharemessage\Entity\Controller;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityViewBuilder;
+use Drupal\file\Entity\File;
 
 /**
  * Render controller for nodes.
@@ -122,13 +123,15 @@ class ShareMessageViewBuilder extends EntityViewBuilder {
     );
     drupal_add_html_head($og_type, 'og_type');
 
-    /* @todo add possibility to upload a file for static image.
-    if (isset($this->sharemessage_image[LANGUAGE_NONE][0]['uri'])) {
-      $image_url = file_create_url($this->sharemessage_image[LANGUAGE_NONE][0]['uri']);
+    $image_url = $this->getTokenizedField($entity->image_url, $context);
+    // If the returned image URl is empty, try to use the fallback image if
+    // one is defined.
+    if (!$image_url && !empty($entity->fallback_image)) {
+      $image = \Drupal::entityManager()->loadEntityByUuid('file', $entity->fallback_image);
+      if ($image) {
+        $image_url = file_create_url($image->getFileUri());
+      }
     }
-    else {*/
-      $image_url = $this->getTokenizedField($entity->image_url, $context);
-    //}
     if ($image_url) {
       $og_image = array(
         '#type' => 'html_tag',
@@ -198,7 +201,7 @@ class ShareMessageViewBuilder extends EntityViewBuilder {
    */
   protected function getTokenizedField($property_value, $context, $default = '') {
     if ($property_value) {
-      return strip_tags(\Drupal::token()->replace($property_value, $context));
+      return strip_tags(\Drupal::token()->replace($property_value, $context, array('clear' => TRUE)));
     }
     return $default;
   }
