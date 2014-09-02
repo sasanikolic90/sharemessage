@@ -472,6 +472,20 @@ function sharemessage_addthis_settings($form, $form_state) {
     '#default_value' => variable_get('sharemessage_local_services_definition', FALSE),
   );
 
+  $form['sharemessage_shared_video_width'] = array(
+    '#title' => t('Video height'),
+    '#description' => t('The width of the player when sharing a video.'),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('sharemessage_shared_video_width', 360),
+  );
+
+  $form['sharemessage_shared_video_height'] = array(
+    '#title' => t('Video height'),
+    '#description' => t('The height of the player when sharing a video.'),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('sharemessage_shared_video_height', 270),
+  );
+
   return system_settings_form($form);
 }
 

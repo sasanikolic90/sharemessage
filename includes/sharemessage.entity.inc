@@ -73,9 +73,7 @@ class ShareMessage extends Entity {
    * Function that adds OG tags in the header of the page.
    */
   private function addOGTags($context) {
-
     // Basic Metadata (og:title, og:type, og:image, og:url).
-
     // OG: Title.
     $og_title = array(
       '#type' => 'html_tag',
@@ -87,18 +85,51 @@ class ShareMessage extends Entity {
     );
     drupal_add_html_head($og_title, 'og_title');
 
-    // OG: Type.
-    $og_type = array(
-      '#type' => 'html_tag',
-      '#tag' => 'meta',
-      '#attributes' => array(
-        'property' => 'og:type',
-        'content' => 'website',
-      ),
-    );
-    drupal_add_html_head($og_type, 'og_type');
+    // Base value for og:type meta tag.
+    $type = 'website';
+    // Add Multiple og tags used for sharing of videos.
+    if ($video_url = $this->getTokenizedField('sharemessage_video_url', $context, NULL)) {
+      $og_video = array(
+        '#type' => 'html_tag',
+        '#tag' => 'meta',
+        '#attributes' => array(
+          'property' => 'og:video',
+          'content' => $video_url . '?fs=1',
+        ),
+      );
+      drupal_add_html_head($og_video, 'og_video');
+      $og_video = array(
+        '#type' => 'html_tag',
+        '#tag' => 'meta',
+        '#attributes' => array(
+          'property' => 'og:video:width',
+          'content' => variable_get('sharemessage_shared_video_width', 360),
+        ),
+      );
+      drupal_add_html_head($og_video, 'og_video_width');
+      $og_video = array(
+        '#type' => 'html_tag',
+        '#tag' => 'meta',
+        '#attributes' => array(
+          'property' => 'og:video:height',
+          'content' => variable_get('sharemessage_shared_video_height', 270),
+        ),
+      );
+      drupal_add_html_head($og_video, 'og_video_height');
+      $og_video = array(
+        '#type' => 'html_tag',
+        '#tag' => 'meta',
+        '#attributes' => array(
+          'property' => 'og:video:type',
+          'content' => 'application/x-shockwave-flash',
+        ),
+      );
+      drupal_add_html_head($og_video, 'og_video_type');
+      // Override og:type to video.
+      $type = 'video';
+    }
 
-    // OG: Image.
+    // OG: Image, can be used for video thumbnails as well.
     if (isset($this->sharemessage_image[LANGUAGE_NONE][0]['uri'])) {
       $image_url = file_create_url($this->sharemessage_image[LANGUAGE_NONE][0]['uri']);
     }
@@ -110,19 +141,30 @@ class ShareMessage extends Entity {
         '#type' => 'html_tag',
         '#tag' => 'meta',
         '#attributes' => array(
-          'property' =>  'og:image',
+          'property' => 'og:image',
           'content' => $image_url,
         ),
       );
       drupal_add_html_head($og_image, 'og_image');
     }
 
+    // OG: Type.
+    $og_type = array(
+      '#type' => 'html_tag',
+      '#tag' => 'meta',
+      '#attributes' => array(
+        'property' => 'og:type',
+        'content' => $type,
+      ),
+    );
+    drupal_add_html_head($og_type, 'og_type');
+
     // OG: URL.
     $og_url = array(
       '#type' => 'html_tag',
       '#tag' => 'meta',
       '#attributes' => array(
-        'property' =>  'og:url',
+        'property' => 'og:url',
         'content' => $this->getUrl($context),
       ),
     );
