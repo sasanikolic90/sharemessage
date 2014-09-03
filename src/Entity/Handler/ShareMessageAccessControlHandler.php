@@ -5,7 +5,7 @@
  * Contains \Drupal\sharemessage\Entity\Controller\ShareMessageAccessController.
  */
 
-namespace Drupal\sharemessage\Entity\Controller;
+namespace Drupal\sharemessage\Entity\Handler;
 
 use Drupal\Core\Entity\EntityAccessControlHandler;
 use Drupal\Core\Entity\EntityInterface;
@@ -15,7 +15,7 @@ use Drupal\Core\Session\AccountInterface;
  *
  * @see \Drupal\contact\Entity\ShareMessage.
  */
-class ShareMessageAccessController extends EntityAccessControlHandler {
+class ShareMessageAccessControlHandler extends EntityAccessControlHandler {
 
   /**
    * {@inheritdoc}

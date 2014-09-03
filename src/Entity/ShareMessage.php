@@ -14,14 +14,14 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  * @ConfigEntityType(
  *   id = "sharemessage",
  *   label = @Translation("Share Message"),
- *   controllers = {
- *     "access" = "Drupal\sharemessage\Entity\Controller\ShareMessageAccessController",
- *     "view_builder" = "Drupal\sharemessage\Entity\Controller\ShareMessageViewBuilder",
- *     "list_builder" = "Drupal\sharemessage\Entity\Controller\ShareMessageListBuilder",
+ *   handlers = {
+ *     "access" = "Drupal\sharemessage\Entity\Handler\ShareMessageAccessControlHandler",
+ *     "view_builder" = "Drupal\sharemessage\Entity\handler\ShareMessageViewBuilder",
+ *     "list_builder" = "Drupal\sharemessage\Entity\handler\ShareMessageListBuilder",
  *     "form" = {
- *       "add" = "Drupal\sharemessage\Entity\Controller\ShareMessageForm",
- *       "edit" = "Drupal\sharemessage\Entity\Controller\ShareMessageForm",
- *       "delete" = "Drupal\sharemessage\Entity\Controller\ShareMessageDeleteForm"
+ *       "add" = "Drupal\sharemessage\Form\ShareMessageForm",
+ *       "edit" = "Drupal\sharemessage\Form\ShareMessageForm",
+ *       "delete" = "Drupal\sharemessage\Form\ShareMessageDeleteForm"
  *     }
  *   },
  *   entity_keys = {

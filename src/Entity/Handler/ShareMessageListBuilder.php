@@ -4,7 +4,7 @@
  * Contains \Drupal\sharemessage\Entity\Controller\ShareMessageListBuilder.
  */
 
-namespace Drupal\sharemessage\Entity\Controller;
+namespace Drupal\sharemessage\Entity\Handler;
 
 use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
 use Drupal\Core\Entity\EntityInterface;

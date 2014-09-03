@@ -5,7 +5,7 @@
  * Definition of Drupal\sharemessage\ShareMessageRenderController.
  */
 
-namespace Drupal\sharemessage\Entity\Controller;
+namespace Drupal\sharemessage\Entity\Handler;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityViewBuilder;

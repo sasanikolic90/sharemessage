@@ -5,7 +5,7 @@
  * Definition of \Drupal\sharemessage\Entity\Controller\ShareMessageFormController.
  */
 
-namespace Drupal\sharemessage\Entity\Controller;
+namespace Drupal\sharemessage\Form;
 
 use Drupal\Core\Entity\EntityConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
