@@ -16,8 +16,8 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *   label = @Translation("Share Message"),
  *   handlers = {
  *     "access" = "Drupal\sharemessage\Entity\Handler\ShareMessageAccessControlHandler",
- *     "view_builder" = "Drupal\sharemessage\Entity\handler\ShareMessageViewBuilder",
- *     "list_builder" = "Drupal\sharemessage\Entity\handler\ShareMessageListBuilder",
+ *     "view_builder" = "Drupal\sharemessage\Entity\Handler\ShareMessageViewBuilder",
+ *     "list_builder" = "Drupal\sharemessage\Entity\Handler\ShareMessageListBuilder",
  *     "form" = {
  *       "add" = "Drupal\sharemessage\Form\ShareMessageForm",
  *       "edit" = "Drupal\sharemessage\Form\ShareMessageForm",
