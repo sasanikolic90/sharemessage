@@ -32,9 +32,6 @@ class ShareMessageViewBuilder extends EntityViewBuilder {
       return array();
     }
 
-    // @todo this was working before 1 month but seems obsolete as of 05.12.2013
-    //parent::buildContent($entities, $displays, $view_mode, $langcode);
-
     $build = array();
     foreach ($entities as $entity) {
       $profileid = \Drupal::config('sharemessage.settings')->get('addthis_profile_id');
@@ -51,7 +48,7 @@ class ShareMessageViewBuilder extends EntityViewBuilder {
       // Add OG Tags to the page.
       $addThis_attributes = FALSE;
       if (strpos(drupal_get_html_head(), 'property="og:') == FALSE && empty($context['_force_attributes'])) {
-        $this->addOGTags($entity, $context);
+        $build[$entity->id()]['#attached']['drupal_add_html_head'] = $this->buildOGTags($entity, $context);
       }
       else {
         $addThis_attributes = TRUE;
@@ -96,32 +93,35 @@ class ShareMessageViewBuilder extends EntityViewBuilder {
   /**
    * Function that adds OG tags in the header of the page.
    */
-  private function addOGTags($entity, $context) {
-
-    // Basic Metadata (og:title, og:type, og:image, og:url).
+  private function buildOGTags($entity, $context) {
+    $tags = array();
 
     // OG: Title.
-    $og_title = array(
-      '#type' => 'html_tag',
-      '#tag' => 'meta',
-      '#attributes' => array(
-        'property' => 'og:title',
-        'content' => $this->getTokenizedField($entity->title, $context),
+    $tags[] = array(
+      array(
+        '#type' => 'html_tag',
+        '#tag' => 'meta',
+        '#attributes' => array(
+          'property' => 'og:title',
+          'content' => $this->getTokenizedField($entity->title, $context),
+        ),
       ),
+      'og_title',
     );
-    drupal_add_html_head($og_title, 'og_title');
 
     // OG: Type.
-    $og_type = array(
-      '#type' => 'html_tag',
-      '#tag' => 'meta',
-      '#attributes' => array(
-        'property' => 'og:type',
-        // @todo don't hardcode this, make configurable per sharemessage entity.
-        'content' => 'website',
+    $tags[] = array(
+      array(
+        '#type' => 'html_tag',
+        '#tag' => 'meta',
+        '#attributes' => array(
+          'property' => 'og:type',
+          // @todo don't hardcode this, make configurable per sharemessage entity.
+          'content' => 'website',
+        ),
       ),
+      'og_type',
     );
-    drupal_add_html_head($og_type, 'og_type');
 
     $image_url = $this->getTokenizedField($entity->image_url, $context);
     // If the returned image URl is empty, try to use the fallback image if
@@ -133,38 +133,45 @@ class ShareMessageViewBuilder extends EntityViewBuilder {
       }
     }
     if ($image_url) {
-      $og_image = array(
-        '#type' => 'html_tag',
-        '#tag' => 'meta',
-        '#attributes' => array(
-          'property' => 'og:image',
-          'content' => $image_url,
+      $tags[] = array(
+        array(
+          '#type' => 'html_tag',
+          '#tag' => 'meta',
+          '#attributes' => array(
+            'property' => 'og:image',
+            'content' => $image_url,
+          ),
         ),
+        'og_image',
       );
-      drupal_add_html_head($og_image, 'og_image');
     }
 
     // OG: URL.
-    $og_url = array(
-      '#type' => 'html_tag',
-      '#tag' => 'meta',
-      '#attributes' => array(
-        'property' => 'og:url',
-        'content' => $this->getUrl($entity, $context),
+    $tags[] = array(
+      array(
+        '#type' => 'html_tag',
+        '#tag' => 'meta',
+        '#attributes' => array(
+          'property' => 'og:url',
+          'content' => $this->getUrl($entity, $context),
+        ),
       ),
+      'og_url',
     );
-    drupal_add_html_head($og_url, 'og_url');
 
     // OG: Description.
-    $og_description = array(
-      '#type' => 'html_tag',
-      '#tag' => 'meta',
-      '#attributes' => array(
-        'property' => 'og:description',
-        'content' => $this->getTokenizedField($entity->message_long, $context),
+    $tags[] = array(
+      array(
+        '#type' => 'html_tag',
+        '#tag' => 'meta',
+        '#attributes' => array(
+          'property' => 'og:description',
+          'content' => $this->getTokenizedField($entity->message_long, $context),
+        ),
       ),
+      'og_description',
     );
-    drupal_add_html_head($og_description, 'og_description');
+    return $tags;
   }
 
   /**
