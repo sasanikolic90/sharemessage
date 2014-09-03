@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Definition of Drupal\sharemessage\ShareMessageRenderController.
+ * Definition of Drupal\sharemessage\Entity\Handler\ShareMessageViewBuilder.
  */
 
 namespace Drupal\sharemessage\Entity\Handler;

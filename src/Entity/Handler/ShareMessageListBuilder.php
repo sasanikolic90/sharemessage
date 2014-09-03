@@ -1,7 +1,8 @@
 <?php
 
 /**
- * Contains \Drupal\sharemessage\Entity\Controller\ShareMessageListBuilder.
+ * @file
+ * Contains \Drupal\sharemessage\Entity\Handler\ShareMessageListBuilder.
  */
 
 namespace Drupal\sharemessage\Entity\Handler;

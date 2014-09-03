@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains \Drupal\sharemessage\Entity\Controller\ShareMessageAccessController.
+ * Contains \Drupal\sharemessage\Entity\Handler\ShareMessageAccessControlHandler.
  */
 
 namespace Drupal\sharemessage\Entity\Handler;
