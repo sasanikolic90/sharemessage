@@ -103,7 +103,7 @@ class ShareMessageViewBuilder extends EntityViewBuilder {
   /**
    * Function that adds icon style as part of addThis widget.
    */
-  private function buildAttributes($entity) {
+  private function buildAttributes(ShareMessage $entity) {
     $icon_style = !empty($entity->settings['icon_style']) ? $entity->settings['icon_style'] : \Drupal::config('sharemessage.settings')->get('icon_style');
     return array(
       'class' => array('addthis_toolbox', 'addthis_default_style', $icon_style),

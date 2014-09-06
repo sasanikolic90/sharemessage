@@ -21,33 +21,6 @@ function sharemessage_permission() {
   );
 }
 
-/**
- * Load a ShareMessage.
- *
- * @return \Drupal\sharemessage\Entity\ShareMessage
- *   The loaded ShareMessage object or FALSE.
- */
-function sharemessage_load($smid, $reset = FALSE) {
-  $sharemessage = sharemessage_load_multiple(array($smid), $reset);
-  return $sharemessage ? reset($sharemessage) : FALSE;
-}
-
-/**
- * Load multiple share messages based on certain conditions.
- *
- * @return array
- *   An array of sharemessage objects indexed by their ids.
- */
-function sharemessage_load_multiple($smids = array(), $reset = FALSE) {
-  return entity_load_multiple('sharemessage', $smids, $reset);
-}
-
-/**
- * Delete multiple share messages.
- */
-function sharemessage_delete_multiple($smids) {
-  entity_delete_multiple('sharemessage', $smids);
-}
 
 /**
  * Checks whether a machine name already exists.
@@ -57,16 +30,6 @@ function sharemessage_delete_multiple($smids) {
  */
 function sharemessage_check_machine_name_if_exist($value) {
   return \Drupal::entityManager()->getStorage('sharemessage')->load($value);
-}
-
-/**
- * Entity view callback.
- *
- * @return array
- *   A render array for the sharemessage.
- */
-function sharemessage_view(ShareMessage $sharemessage) {
-  return entity_view($sharemessage, 'full', NULL, TRUE);
 }
 
 /**

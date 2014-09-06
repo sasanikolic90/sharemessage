@@ -3,5 +3,5 @@ sharemessage_test.view:
   defaults:
     _entity_view: 'sharemessage'
   requirements:
-    _access: 'TRUE'
+    _entity_access: 'sharemessage.view'
 

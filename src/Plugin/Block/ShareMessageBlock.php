@@ -73,7 +73,6 @@ class ShareMessageBlock extends BlockBase implements ContainerFactoryPluginInter
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
-    // By default, the block will contain 10 feed items.
     return array(
       'sharemessage' => NULL,
     );
@@ -83,7 +82,6 @@ class ShareMessageBlock extends BlockBase implements ContainerFactoryPluginInter
    * {@inheritdoc}
    */
   public function blockAccess(AccountInterface $account) {
-    // Only grant access to users with the 'access news feeds' permission.
     return $account->hasPermission('view sharemessages');
   }
 
@@ -94,7 +92,7 @@ class ShareMessageBlock extends BlockBase implements ContainerFactoryPluginInter
     $sharemessages = $this->storageController->loadMultiple();
     $options = array();
     foreach ($sharemessages as $sharemessage) {
-      $options[$sharemessage->id] = $sharemessage->getLabel();
+      $options[$sharemessage->id()] = $sharemessage->label();
     }
     $form['sharemessage'] = array(
       '#type' => 'select',

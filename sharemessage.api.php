@@ -5,21 +5,18 @@
  * Hooks provided by share message module.
  */
 
-
 /**
  * Allow other modules to alter sharemessage token context.
  *
- * @param $sharemessage
+ * @param \Drupal\sharemessage\Entity\ShareMessage $sharemessage
  *   Currently loaded sharemessage object.
- * @param $context
+ * @param array $context
  *   Token Context.
  */
-function hook_sharemessage_token_context_alter($sharemessage, &$context) {
-  global $language;
-
+function hook_sharemessage_token_context_alter(Drupal\sharemessage\Entity\ShareMessage $sharemessage, &$context) {
   // Alter sharemessage title.
-  $sharemessage->sharemessage_title[$language->language][0]['value'] = 'Altered Title';
+  $sharemessage->title = 'Altered Title';
 
   // Add taxonomy_vocabulary object type in a $context array.
-  $context['taxonomy_vocabulary'] = menu_get_object('taxonomy_vocabulary');
+  $context['taxonomy_vocabulary'] = \Drupal::routeMatch()->getParameter('taxonomy_vocabulary');
 }

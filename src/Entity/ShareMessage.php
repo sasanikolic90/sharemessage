@@ -108,13 +108,6 @@ class ShareMessage extends ConfigEntityBase {
   /**
    * {@inheritdoc}
    */
-  public function getLabel() {
-    return $this->get('label');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function setLabel($label) {
     $this->set('label', $label);
     return $this;

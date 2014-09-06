@@ -28,7 +28,7 @@ class ShareMessageForm extends EntityForm {
       '#type' => 'textfield',
       '#title' => t('Label'),
       '#required' => TRUE,
-      '#default_value' => $sharemessage->getLabel(),
+      '#default_value' => $sharemessage->label(),
       '#weight' => -3,
     );
 

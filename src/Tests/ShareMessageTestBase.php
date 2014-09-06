@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Definition of Drupal\sharemessage\ShareMessageTestBase.
+ * Contains \Drupal\sharemessage\ShareMessageTestBase.
  */
 
 namespace Drupal\sharemessage\Tests;

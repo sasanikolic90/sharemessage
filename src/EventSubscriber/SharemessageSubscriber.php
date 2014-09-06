@@ -8,6 +8,7 @@ namespace Drupal\sharemessage\EventSubscriber;
 
 use Drupal\Core\Page\HtmlPage;
 use Drupal\Core\Page\MetaElement;
+use Drupal\sharemessage\Entity\ShareMessage;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -32,7 +33,7 @@ class SharemessageSubscriber implements EventSubscriberInterface {
     if ($page instanceof HtmlPage) {
       $smid = $event->getRequest()->query->get('smid');
       if (!empty($smid) && \Drupal::config('sharemessage.settings')->get('message_enforcement')) {
-        $sharemessage = sharemessage_load($smid);
+        $sharemessage = ShareMessage::load($smid);
         if ($sharemessage) {
           foreach ($sharemessage->buildOGTags($sharemessage->getContext()) as $tag) {
             $page->addMetaElement(new MetaElement(NULL, $tag['#attributes']));

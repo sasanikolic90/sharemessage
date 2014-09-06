@@ -11,7 +11,7 @@ namespace Drupal\sharemessage\Tests;
  *
  * @group Sharemessage
  */
-class ShareMessageExposeToBlockTestCase extends ShareMessageTestBase {
+class ShareMessageExposeToBlockTest extends ShareMessageTestBase {
 
   /**
    * Test case that check if sharemessage is exposed as block.
