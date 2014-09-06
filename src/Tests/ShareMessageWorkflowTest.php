@@ -69,19 +69,24 @@ class ShareMessageWorkflowTest extends ShareMessageTestBase {
     $sharemessage = entity_load('sharemessage', 'sharemessage_test_label2');
     // Check if the option was saved as expected.
     $this->assertEqual(!empty($sharemessage->settings['enforce_usage']), TRUE, 'Enforce setting was saved on the entity.');
-    $this->drupalGet('sharemessage-test/sharemessage_test_label', array('query' => array('smid' => 2)));
+    $this->drupalGet('sharemessage-test/sharemessage_test_label', array('query' => array('smid' => 'sharemessage_test_label2')));
 
     // Check if the og:description tag gets rendered correctly.
     $meta_description = '<meta property="og:description" content="' . $edit_2['message_long'] . '" />';
     $this->assertRaw($meta_description, t('OG:description was overridden properly.'));
     // Check if the og:url tag gets rendered correctly.
-    $url = url($edit['share_url'], array('query' => array('smid' => 2)));
+    $url = url($edit['share_url'], array('query' => array('smid' => 'sharemessage_test_label2')));
     $meta_url = '<meta property="og:url" content="' . $url . '" />';
     $this->assertRaw($meta_url, t('OG:url has correct query string.'));
+    $meta_url = '<meta property="og:url" content="' . $edit['share_url'] . '" />';
+    $this->assertNoRaw($meta_url, t('Suppressing og:url meta tag for overridden sharemessage.'));
+
+    // Check if the overridden sharemessage is rendered correctly.
+    $this->assertRaw('addthis:description="' . $edit['message_long'] . '"', t('Overridden sharemessage has OG data as attributes.'));
 
     // Disable enforcement of overrides in the global settings.
     \Drupal::config('sharemessage.settings')->set('message_enforcement', FALSE)->save();
-    $this->drupalGet('sharemessage-test/sharemessage_test_label', array('query' => array('smid' => 2)));
+    $this->drupalGet('sharemessage-test/sharemessage_test_label', array('query' => array('smid' => 'sharemessage_test_label2')));
 
     // Check if the og:description tag gets rendered correctly.
     $meta_description = '<meta property="og:description" content="' . $edit['message_long'] . '" />';

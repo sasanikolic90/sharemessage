@@ -111,19 +111,6 @@ function sharemessage_get_addthis_services() {
 }
 
 /**
- * Implements hook_init().
- */
-function sharemessage_init() {
-  $smid = \Drupal::request()->get('smid');
-  if (!empty($smid) && \Drupal::config('sharemessage.settings')->get('message_enforcement')) {
-    $sharemessage = sharemessage_load($smid);
-    if ($sharemessage) {
-      entity_view($sharemessage, 'only_og_tags');
-    }
-  }
-}
-
-/**
  * Getter for the services definitions.
  *
  * If option is set the local file within the module folder will be read instead

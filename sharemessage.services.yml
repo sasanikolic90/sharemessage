@@ -1,0 +1,5 @@
+services:
+  sharemessage.event_subscriber:
+    class: Drupal\sharemessage\EventSubscriber\SharemessageSubscriber
+    tags:
+      - { name: event_subscriber }
