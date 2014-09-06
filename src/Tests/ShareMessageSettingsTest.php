@@ -22,12 +22,12 @@ class ShareMessageSettingsTest extends ShareMessageTestBase {
     $this->drupalGet('admin/config/services/sharemessage/settings');
     debug('BLABLA');
     $default_settings = array(
-      'sharemessage_default_services[]' => array(
+      'default_services[]' => array(
         'facebook',
         'facebook_like',
       ),
-      'sharemessage_default_additional_services' => FALSE,
-      'sharemessage_default_icon_style' => 'addthis_16x16_style',
+      'default_additional_services' => FALSE,
+      'default_icon_style' => 'addthis_16x16_style',
     );
     $this->drupalPostForm(NULL, $default_settings, t('Save configuration'));
 
@@ -80,7 +80,7 @@ class ShareMessageSettingsTest extends ShareMessageTestBase {
     $this->assertNoRaw($raw_html_additional_services, t('Additional services buttion is not displayed as it is globally configured.'));
 
     // Check icon style (should be addthis_16x16_style).
-    $raw_html_default_icon_style = '<div class="addthis_toolbox addthis_default_style ' . $default_settings['sharemessage_default_icon_style'] . '"';
+    $raw_html_default_icon_style = '<div class="addthis_toolbox addthis_default_style ' . $default_settings['default_icon_style'] . '"';
     $this->assertRaw($raw_html_default_icon_style, t('Default icon style is used.'));
   }
 }

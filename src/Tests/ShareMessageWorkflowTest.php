@@ -35,7 +35,7 @@ class ShareMessageWorkflowTest extends ShareMessageTestBase {
     // Step 2: Display share message and verify AddThis markup
     // and meta header elements.
     $this->drupalGet('sharemessage-test/sharemessage_test_label');
-    $raw_html_string = '<div class="addthis_toolbox addthis_default_style ">';
+    $raw_html_string = '<div class="addthis_toolbox addthis_default_style addthis_16x16_style">';
     $this->assertRaw($raw_html_string, t('AddThis buttons are displayed.'));
 
     $meta_title = '<meta property="og:title" content="' . $edit['title'] . '" />';
@@ -75,7 +75,7 @@ class ShareMessageWorkflowTest extends ShareMessageTestBase {
     $meta_description = '<meta property="og:description" content="' . $edit_2['message_long'] . '" />';
     $this->assertRaw($meta_description, t('OG:description was overridden properly.'));
     // Check if the og:url tag gets rendered correctly.
-    $url = url($edit['sharemessage_url'], array('query' => array('smid' => 2)));
+    $url = url($edit['share_url'], array('query' => array('smid' => 2)));
     $meta_url = '<meta property="og:url" content="' . $url . '" />';
     $this->assertRaw($meta_url, t('OG:url has correct query string.'));
 
