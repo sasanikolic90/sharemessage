@@ -86,6 +86,20 @@ class SettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('local_services_definition'),
     );
 
+    $form['shared_video_width'] = array(
+      '#title' => t('Video height'),
+      '#description' => t('The width of the player when sharing a video.'),
+      '#type' => 'textfield',
+      '#default_value' => $config->get('shared_video_width', 360),
+    );
+
+    $form['shared_video_height'] = array(
+      '#title' => t('Video height'),
+      '#description' => t('The height of the player when sharing a video.'),
+      '#type' => 'textfield',
+      '#default_value' => $config->get('shared_video_height', 270),
+    );
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -101,6 +115,8 @@ class SettingsForm extends ConfigFormBase {
       ->set('icon_style', $form_state['values']['default_icon_style'])
       ->set('message_enforcement', $form_state['values']['message_enforcement'])
       ->set('local_services_definition', $form_state['values']['local_services_definition'])
+      ->set('shared_video_width', $form_state['values']['shared_video_width'])
+      ->set('shared_video_height', $form_state['values']['shared_video_height'])
       ->save();
 
     drupal_set_message(t('ShareMessage settings have been updated.'));

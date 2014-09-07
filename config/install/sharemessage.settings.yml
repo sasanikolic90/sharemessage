@@ -4,3 +4,5 @@ counter: FALSE
 icon_style: 'addthis_16x16_style'
 message_enforcement: TRUE
 local_services_definition: FALSE
+shared_video_width: 360
+shared_video_height: 270

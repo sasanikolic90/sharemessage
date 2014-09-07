@@ -69,11 +69,19 @@ class ShareMessageForm extends EntityForm {
       '#weight' => 15,
     );
 
+    $form['video_url'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Video URL'),
+      '#default_value' => $sharemessage->video_url,
+      '#description' => t('The video URL that will be used for sharing.'),
+      '#weight' => 18,
+    );
+
     $form['image_url'] = array(
       '#type' => 'textfield',
       '#title' => t('Image URL'),
       '#default_value' => $sharemessage->image_url,
-      '#description' => t('The image URL that will be used for sharing.'),
+      '#description' => t('The image URL that will be used for sharing. If a video URL is set, the image is used as a thumbnail for the video.'),
       '#weight' => 20,
     );
 

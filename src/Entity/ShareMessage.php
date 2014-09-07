@@ -99,6 +99,13 @@ class ShareMessage extends ConfigEntityBase {
   public $fallback_image;
 
   /**
+   * A video URL to use for sharing.
+   *
+   * @var string
+   */
+  public $video_url;
+
+  /**
    * Specific URL that will be shared, defaults to the current page
    *
    * @var string
@@ -165,6 +172,10 @@ class ShareMessage extends ConfigEntityBase {
   public function buildOGTags($context) {
     $tags = array();
 
+    // Base value for og:type meta tag.
+    // @todo don't hardcode this, make configurable per sharemessage entity.
+    $type = 'website';
+
     // OG: Title.
     $tags[] = array(
       '#type' => 'html_tag',
@@ -175,17 +186,7 @@ class ShareMessage extends ConfigEntityBase {
       ),
     );
 
-    // OG: Type.
-    $tags[] = array(
-      '#type' => 'html_tag',
-      '#tag' => 'meta',
-      '#attributes' => array(
-        'property' => 'og:type',
-        // @todo don't hardcode this, make configurable per sharemessage entity.
-        'content' => 'website',
-      ),
-    );
-
+    // OG: Image, also used for video thumbnail.
     $image_url = $this->getTokenizedField($this->image_url, $context);
     // If the returned image URl is empty, try to use the fallback image if
     // one is defined.
@@ -204,6 +205,44 @@ class ShareMessage extends ConfigEntityBase {
           'content' => $image_url,
         ),
       );
+    }
+
+    // OG: Video.
+    if ($video_url = $this->getTokenizedField($this->video_url, $context)) {
+      $tags[] = array(
+        '#type' => 'html_tag',
+        '#tag' => 'meta',
+        '#attributes' => array(
+          'property' => 'og:video',
+          'content' => $video_url . '?fs=1',
+        ),
+      );
+      $tags[] = array(
+        '#type' => 'html_tag',
+        '#tag' => 'meta',
+        '#attributes' => array(
+          'property' => 'og:video:width',
+          'content' => \Drupal::config('sharemessage.settings')->get('shared_video_width'),
+        ),
+      );
+      $tags[] = array(
+        '#type' => 'html_tag',
+        '#tag' => 'meta',
+        '#attributes' => array(
+          'property' => 'og:video:height',
+          'content' => \Drupal::config('sharemessage.settings')->get('shared_video_height'),
+        ),
+      );
+      $tags[] = array(
+        '#type' => 'html_tag',
+        '#tag' => 'meta',
+        '#attributes' => array(
+          'property' => 'og:video:type',
+          'content' => 'application/x-shockwave-flash',
+        ),
+      );
+      // Override og:type to video.
+      $type = 'video';
     }
 
     // OG: URL.
@@ -225,6 +264,17 @@ class ShareMessage extends ConfigEntityBase {
         'content' => $this->getTokenizedField($this->message_long, $context),
       ),
     );
+
+    // OG: Type.
+    $tags[] = array(
+      '#type' => 'html_tag',
+      '#tag' => 'meta',
+      '#attributes' => array(
+        'property' => 'og:type',
+        'content' => $type,
+      ),
+    );
+
     return $tags;
   }
 

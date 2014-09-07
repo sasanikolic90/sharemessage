@@ -27,6 +27,9 @@ sharemessage.sharemessage.*:
     fallback_image:
       type: string
       label: 'Fallback image UUID'
+    video_url:
+      type: string
+      label: 'Video URL'
     share_url:
       type: string
       label: 'Share URL'
