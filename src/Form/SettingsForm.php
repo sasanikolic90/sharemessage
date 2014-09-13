@@ -108,15 +108,15 @@ class SettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->configFactory->get('sharemessage.settings')
-      ->set('addthis_profile_id', $form_state['values']['addthis_profile_id'])
-      ->set('services', $form_state['values']['default_services'])
-      ->set('additional_services', $form_state['values']['default_additional_services'])
-      ->set('counter', $form_state['values']['default_counter'])
-      ->set('icon_style', $form_state['values']['default_icon_style'])
-      ->set('message_enforcement', $form_state['values']['message_enforcement'])
-      ->set('local_services_definition', $form_state['values']['local_services_definition'])
-      ->set('shared_video_width', $form_state['values']['shared_video_width'])
-      ->set('shared_video_height', $form_state['values']['shared_video_height'])
+      ->set('addthis_profile_id', $form_state->getValue('addthis_profile_id'))
+      ->set('services', $form_state->getValue('default_services'))
+      ->set('additional_services', $form_state->getValue('default_additional_services'))
+      ->set('counter', $form_state->getValue('default_counter'))
+      ->set('icon_style', $form_state->getValue('default_icon_style'))
+      ->set('message_enforcement', $form_state->getValue('message_enforcement'))
+      ->set('local_services_definition', $form_state->getValue('local_services_definition'))
+      ->set('shared_video_width', $form_state->getValue('shared_video_width'))
+      ->set('shared_video_height', $form_state->getValue('shared_video_height'))
       ->save();
 
     drupal_set_message(t('ShareMessage settings have been updated.'));

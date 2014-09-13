@@ -107,7 +107,7 @@ class ShareMessageBlock extends BlockBase implements ContainerFactoryPluginInter
    * {@inheritdoc}
    */
   public function blockSubmit($form, FormStateInterface $form_state) {
-    $this->configuration['sharemessage'] = $form_state['values']['sharemessage'];
+    $this->configuration['sharemessage'] = $form_state->getValue('sharemessage');
   }
 
   /**
