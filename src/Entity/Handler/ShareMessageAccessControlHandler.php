@@ -7,6 +7,7 @@
 
 namespace Drupal\sharemessage\Entity\Handler;
 
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityAccessControlHandler;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -22,11 +23,10 @@ class ShareMessageAccessControlHandler extends EntityAccessControlHandler {
    */
   public function checkAccess(EntityInterface $entity, $operation, $langcode, AccountInterface $account) {
     if ($operation == 'delete' || $operation == 'update') {
-      // Do not allow delete 'personal' category used for personal contact form.
-      return $account->hasPermission('administer sharemessages');
+      return AccessResult::allowedIfHasPermission($account, 'administer scharemessages');
     }
     else {
-      return $account->hasPermission('administer sharemessages');
+      return AccessResult::allowed();
     }
   }
 
@@ -34,7 +34,7 @@ class ShareMessageAccessControlHandler extends EntityAccessControlHandler {
    * {@inheritdoc}
    */
   protected function checkCreateAccess(AccountInterface $account, array $context, $entity_bundle = NULL) {
-    return $account->hasPermission('administer sharemessages');
+    return AccessResult::allowedIfHasPermission($account, 'administer scharemessages');
   }
 
 }
