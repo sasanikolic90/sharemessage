@@ -8,21 +8,6 @@
 use Drupal\sharemessage\Entity\ShareMessage;
 
 /**
- * Implements hook_permission().
- */
-function sharemessage_permission() {
-  return array(
-    'view sharemessages' => array(
-      'title' => t('View ShareMessage entities.'),
-    ),
-    'administer sharemessages' => array(
-      'title' => t('Administer ShareMessage entities.'),
-    ),
-  );
-}
-
-
-/**
  * Checks whether a machine name already exists.
  *
  * @return bool
