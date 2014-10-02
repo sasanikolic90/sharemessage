@@ -232,11 +232,11 @@ class ShareMessageForm extends EntityForm {
     $url = $sharemessage->url();
     if ($status == SAVED_UPDATED) {
       drupal_set_message(t('ShareMessage %label has been updated.', array('%label' => $sharemessage->label())));
-      watchdog('contact', 'ShareMessage %label has been updated.', array('%label' => $sharemessage->label()), WATCHDOG_NOTICE, l(t('Edit'), $url . '/edit'));
+      watchdog('contact', 'ShareMessage %label has been updated.', array('%label' => $sharemessage->label()), WATCHDOG_NOTICE, $sharemessage->link($this->t('Edit'), 'edit-form'));
     }
     else {
       drupal_set_message(t('ShareMessage %label has been added.', array('%label' => $sharemessage->label())));
-      watchdog('contact', 'ShareMessage %label has been added.', array('%label' => $sharemessage->label()), WATCHDOG_NOTICE, l(t('Edit'), $url . '/edit'));
+      watchdog('contact', 'ShareMessage %label has been added.', array('%label' => $sharemessage->label()), WATCHDOG_NOTICE, $sharemessage->link($this->t('Edit'), 'edit-form'));
     }
     $form_state->setRedirect('sharemessage.sharemessage_list');
   }

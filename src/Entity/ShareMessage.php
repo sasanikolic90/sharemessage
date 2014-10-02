@@ -7,6 +7,7 @@
 namespace Drupal\sharemessage\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityBase;
+use Drupal\Core\Url;
 
 /**
  * Entity class for the Share Message entity.
@@ -312,7 +313,17 @@ class ShareMessage extends ConfigEntityBase {
     if (!empty($this->settings['enforce_usage'])) {
       $options['query'] = array('smid' => $this->id);
     }
-    return url($this->getTokenizedField($this->share_url, $context, current_path()), $options);
+    $uri = $this->getTokenizedField($this->share_url, $context, current_path());
+    if (strpos($uri, '://') !== FALSE) {
+      return Url::fromUri($uri, $options)->toString();
+    }
+    // Try to find a matching route.
+    elseif ($url = \Drupal::pathValidator()->getUrlIfValid($uri)) {
+      return $url->toString();
+    }
+    else {
+      return Url::fromUri('base://' . $uri, $options)->toString();
+    }
   }
 
 }
