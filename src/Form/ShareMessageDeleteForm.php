@@ -44,7 +44,7 @@ class ShareMessageDeleteForm extends EntityConfirmFormBase {
   public function submit(array $form, FormStateInterface $form_state) {
     $this->entity->delete();
     drupal_set_message(t('ShareMessage %label has been deleted.', array('%label' => $this->entity->label())));
-    watchdog('contact', 'ShareMessage %label has been deleted.', array('%label' => $this->entity->label()), WATCHDOG_NOTICE);
+    \Drupal::logger('sharemessage')->notice('ShareMessage %label has been deleted.', array('%label' => $this->entity->label()), WATCHDOG_NOTICE);
     $form_state->setRedirect('sharemessage.sharemessage_list');
   }
 
