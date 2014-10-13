@@ -44,7 +44,7 @@ class ShareMessageViewBuilder extends EntityViewBuilder {
       // Add OG Tags to the page.
       $addThis_attributes = FALSE;
       if (!$is_overridden && empty($context['_force_attributes'])) {
-        $build[$entity->id()]['#attached']['drupal_add_html_head'] = $this->mapHeadElements($entity->buildOGTags($context));
+        $build[$entity->id()]['#attached']['html_head'] = $this->mapHeadElements($entity->buildOGTags($context));
       }
       else {
         $addThis_attributes = TRUE;

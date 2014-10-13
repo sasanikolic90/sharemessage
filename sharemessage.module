@@ -24,7 +24,7 @@ function sharemessage_get_addthis_services() {
   $options = &drupal_static(__FUNCTION__);
 
   if (!isset($options)) {
-    if ($cache = \Drupal::cache()->get('sharemessage_addthis_services:' . \Drupal::languageManager()->getCurrentLanguage()->id)) {
+    if ($cache = \Drupal::cache()->get('sharemessage_addthis_services:' . \Drupal::languageManager()->getCurrentLanguage()->getId())) {
       $options = $cache->data;
     }
     else {
@@ -47,10 +47,10 @@ function sharemessage_get_addthis_services() {
         $options[t('Common')]['tweet'] = t('Tweet');
         // Neither is Pinterest Follow.
         $options[t('Common')]['pinterest_follow'] = t('Pinterest follow');
-        \Drupal::cache()->set('sharemessage_addthis_services:' . \Drupal::languageManager()->getCurrentLanguage()->id, $options);
+        \Drupal::cache()->set('sharemessage_addthis_services:' . \Drupal::languageManager()->getCurrentLanguage()->getId(), $options);
       }
       else {
-        \Drupal::cache()->delete('sharemessage_addthis_services:' . \Drupal::languageManager()->getCurrentLanguage()->id);
+        \Drupal::cache()->delete('sharemessage_addthis_services:' . \Drupal::languageManager()->getCurrentLanguage()->getId());
       }
     }
   }
