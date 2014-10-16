@@ -6,6 +6,8 @@
 
 namespace Drupal\sharemessage\Tests;
 
+use Drupal\Core\Url;
+
 /**
  * Main sharemessage workflow through the admin UI.
  *
@@ -75,7 +77,7 @@ class ShareMessageWorkflowTest extends ShareMessageTestBase {
     $meta_description = '<meta property="og:description" content="' . $edit_2['message_long'] . '" />';
     $this->assertRaw($meta_description, t('OG:description was overridden properly.'));
     // Check if the og:url tag gets rendered correctly.
-    $url = url($edit['share_url'], array('query' => array('smid' => 'sharemessage_test_label2')));
+    $url = Url::fromUri($edit['share_url'], array('query' => array('smid' => 'sharemessage_test_label2')))->toString();
     $meta_url = '<meta property="og:url" content="' . $url . '" />';
     $this->assertRaw($meta_url, t('OG:url has correct query string.'));
     $meta_url = '<meta property="og:url" content="' . $edit['share_url'] . '" />';

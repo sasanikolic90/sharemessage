@@ -19,7 +19,7 @@ class ShareMessageExposeToBlockTest extends ShareMessageTestBase {
   public function testShareMessageExposeToBlock() {
     // First enable the bartik theme to place the sharemessage block afterwards.
     $theme = 'bartik';
-    \Drupal::service('theme_handler')->enable(array($theme));
+    \Drupal::service('theme_handler')->install(array($theme));
     \Drupal::config('system.theme')->set('default', $theme)->save();
 
     // Create another sharemessage.
