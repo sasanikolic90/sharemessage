@@ -23,7 +23,7 @@ class ShareMessageAccessControlHandler extends EntityAccessControlHandler {
    */
   public function checkAccess(EntityInterface $entity, $operation, $langcode, AccountInterface $account) {
     if ($operation == 'delete' || $operation == 'update') {
-      return AccessResult::allowedIfHasPermission($account, 'administer scharemessages');
+      return AccessResult::allowedIfHasPermission($account, 'administer sharemessages');
     }
     else {
       return AccessResult::allowed();
@@ -34,7 +34,7 @@ class ShareMessageAccessControlHandler extends EntityAccessControlHandler {
    * {@inheritdoc}
    */
   protected function checkCreateAccess(AccountInterface $account, array $context, $entity_bundle = NULL) {
-    return AccessResult::allowedIfHasPermission($account, 'administer scharemessages');
+    return AccessResult::allowedIfHasPermission($account, 'administer sharemessages');
   }
 
 }
