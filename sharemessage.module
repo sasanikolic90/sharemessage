@@ -139,7 +139,12 @@ function sharemessage_menu() {
 function sharemessage_access($op, $sharemessage, $account = NULL, $entity_type = NULL) {
   switch ($op) {
     case 'view':
-      return user_access('view sharemessage entities', $account);
+      // Check whether there is actually an entity that gets rendered. The view
+      // permission is also used on the entity admin ui. There, the ShareMessage
+      // object is null and the access check falls back to the admin permission.
+      if (!empty($sharemessage)) {
+        return user_access('view sharemessage entities', $account);
+      }
     default:
       return user_access('administer sharemessage entities', $account);
   }
