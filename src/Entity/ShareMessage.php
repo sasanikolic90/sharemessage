@@ -313,7 +313,7 @@ class ShareMessage extends ConfigEntityBase {
     if (!empty($this->settings['enforce_usage'])) {
       $options['query'] = array('smid' => $this->id);
     }
-    $uri = $this->getTokenizedField($this->share_url, $context, current_path());
+    $uri = $this->getTokenizedField($this->share_url, $context, Url::fromRoute('<current>')->getInternalPath());
     if (strpos($uri, '://') !== FALSE) {
       return Url::fromUri($uri, $options)->toString();
     }

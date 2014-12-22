@@ -5,8 +5,6 @@
  * New Sharing Module.
  */
 
-use Drupal\sharemessage\Entity\ShareMessage;
-
 /**
  * Checks whether a machine name already exists.
  *
@@ -15,6 +13,22 @@ use Drupal\sharemessage\Entity\ShareMessage;
  */
 function sharemessage_check_machine_name_if_exist($value) {
   return \Drupal::entityManager()->getStorage('sharemessage')->load($value);
+}
+
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function sharemessage_library_info_alter(&$libraries, $extension) {
+  if ($extension != 'sharemessage') {
+    return;
+  }
+  // Add the profile id to the URL if present.
+  $profile_id = \Drupal::config('sharemessage.settings')->get('addthis_profile_id');
+  if ($profile_id) {
+    $libraries['addthis']['js']['//s7.addthis.com/js/300/addthis_widget.js##pubid=' . $profile_id] = $libraries['addthis']['js']['//s7.addthis.com/js/300/addthis_widget.js'];
+    unset($libraries['addthis']['js']['//s7.addthis.com/js/300/addthis_widget.js']);
+  }
 }
 
 /**

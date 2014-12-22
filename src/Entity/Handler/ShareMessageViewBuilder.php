@@ -35,7 +35,7 @@ class ShareMessageViewBuilder extends EntityViewBuilder {
 
     $build = array();
     foreach ($entities as $entity) {
-      $profileid = \Drupal::config('sharemessage.settings')->get('addthis_profile_id');
+
 
       $context = $entity->getContext();
 
@@ -64,18 +64,10 @@ class ShareMessageViewBuilder extends EntityViewBuilder {
           ),
           'addthis_js' => array(
             '#attached' => array(
-              'js' => array(
-                array(
-                  'data' => array(
-                    'addthis_config' => array(
-                      'data_track_addressbar' => TRUE,
-                    ),
-                  ),
-                  'type' => 'setting',
-                ),
-                array(
-                  'data' => '//s7.addthis.com/js/300/addthis_widget.js#pubid=' . $profileid,
-                  'type' => 'external',
+              'library' => ['sharemessage/addthis'],
+              'drupalSettings' => array(
+                'addthis_config' => array(
+                  'data_track_addressbar' => TRUE,
                 ),
               ),
             ),
@@ -134,8 +126,9 @@ class ShareMessageViewBuilder extends EntityViewBuilder {
     if (!empty($services)) {
       foreach ($services as $key => $service) {
         if ($key == 'twitter' && $entity->message_short) {
-          // @todo. This doesn't work, should be printed here.
-          _drupal_add_js("var addthis_share = { templates: { twitter: '" . $entity->getTokenizedField($entity->message_short, $context) . "', } }", array('type' => 'inline'));
+          $services_HTML .= "<script>
+<!--//--><![CDATA[//><!-- var addthis_share = { templates: { twitter: '" . $entity->getTokenizedField($entity->message_short, $context) . " } } //--><!]]>
+</script>";
         }
         $services_HTML .= '<a class="addthis_button_' . $key . '"></a>';
       }

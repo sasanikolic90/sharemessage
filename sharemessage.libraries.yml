@@ -1,0 +1,9 @@
+addthis:
+  remote: http://addthis.com
+  version: -1
+  license:
+    name: Properitary
+    url: http://addthis.com
+    gpl-compatible: false
+  js:
+    //s7.addthis.com/js/300/addthis_widget.js: { type: external }

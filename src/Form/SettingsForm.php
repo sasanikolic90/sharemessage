@@ -7,6 +7,7 @@
 
 namespace Drupal\sharemessage\Form;
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -107,6 +108,11 @@ class SettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    parent::submitForm($form, $form_state);
+
+    // If the profile id changes then we need to rebuild the library cache.
+    Cache::deleteTags(['library_info']);
+
     $this->configFactory->get('sharemessage.settings')
       ->set('addthis_profile_id', $form_state->getValue('addthis_profile_id'))
       ->set('services', $form_state->getValue('default_services'))
@@ -119,6 +125,7 @@ class SettingsForm extends ConfigFormBase {
       ->set('shared_video_height', $form_state->getValue('shared_video_height'))
       ->save();
 
-    drupal_set_message(t('ShareMessage settings have been updated.'));
+
+
   }
 }
