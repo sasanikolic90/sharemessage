@@ -9,7 +9,6 @@ namespace Drupal\sharemessage\Entity\Handler;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityViewBuilder;
-use Drupal\file\Entity\File;
 use Drupal\sharemessage\Entity\ShareMessage;
 
 /**

@@ -125,7 +125,7 @@ class ShareMessageBlock extends BlockBase implements ContainerFactoryPluginInter
    */
   public function calculateDependencies() {
     return array(
-      'entity' => array('sharemessage.sharemessage.' . $this->configuration['sharemessage']),
+      'config' => array('sharemessage.sharemessage.' . $this->configuration['sharemessage']),
     );
   }
 

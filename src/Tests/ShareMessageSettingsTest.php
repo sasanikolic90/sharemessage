@@ -20,7 +20,6 @@ class ShareMessageSettingsTest extends ShareMessageTestBase {
 
     // Step 1: Setup default settings.
     $this->drupalGet('admin/config/services/sharemessage/settings');
-    debug('BLABLA');
     $default_settings = array(
       'default_services[]' => array(
         'facebook',

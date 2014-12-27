@@ -1,4 +1,38 @@
 
+sharemessage.settings:
+  type: mapping
+  mapping:
+    addthis_profile_id:
+      type: string
+      label: Addthis profile ID
+    additional_services:
+      type: boolean
+      label: Show additional services
+    counter:
+      type: boolean
+      label: Show counter
+    icon_style:
+      type: string
+      label: Icon style
+    message_enforcement:
+      type: boolean
+      label: Enforce message through URL
+    local_services_definition:
+      type: boolean
+      label: Local services definition
+    shared_video_width:
+      type: integer
+      label: Shared video width
+    shared_video_height:
+      type: integer
+      label: Shared video height
+    services:
+      type: sequence
+      label: Enabled services
+      sequence:
+        - type: string
+          label: Service name
+
 sharemessage.sharemessage.*:
   type: config_entity
   label: 'Share message'
@@ -37,3 +71,28 @@ sharemessage.sharemessage.*:
       type: mapping
       label: 'Settings'
       mapping:
+        additional_services:
+          type: boolean
+          label: Show additional services
+        counter:
+          type: boolean
+          label: Show counter
+        icon_style:
+          type: string
+          label: Icon style
+        enforce_usage:
+          type: boolean
+          label: Enforce usage through URL
+        services:
+          type: sequence
+          label: Enabled services
+          sequence:
+            - type: string
+              label: Service name
+
+block.settings.sharemessage_block:
+  type: block_settings
+  mapping:
+    sharemessage:
+      type: string
+      label: Selected share message

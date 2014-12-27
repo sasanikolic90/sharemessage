@@ -4,6 +4,7 @@
  * @file
  * New Sharing Module.
  */
+use Drupal\sharemessage\Entity\ShareMessage;
 
 /**
  * Checks whether a machine name already exists.
@@ -31,6 +32,23 @@ function sharemessage_library_info_alter(&$libraries, $extension) {
   }
 }
 
+/**
+ * Implements hook_page_attachments().
+ */
+function sharemessage_page_attachments(&$page) {
+  $smid = \Drupal::request()->query->get('smid');
+  if (!empty($smid) && \Drupal::config('sharemessage.settings')->get('message_enforcement')) {
+    $sharemessage = ShareMessage::load($smid);
+    if ($sharemessage) {
+      foreach ($sharemessage->buildOGTags($sharemessage->getContext()) as $tag) {
+        $page['#attached']['html_head'][] = [
+          $tag,
+          str_replace(':', '_', $tag['#attributes']['property']),
+        ];
+      }
+    }
+  }
+}
 /**
  * Load AddThis services.
  */
