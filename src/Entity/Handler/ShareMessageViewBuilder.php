@@ -61,13 +61,11 @@ class ShareMessageViewBuilder extends EntityViewBuilder {
           'additional_services' => array(
             '#markup' => $this->buildAdditionalServicesPart($entity),
           ),
-          'addthis_js' => array(
-            '#attached' => array(
-              'library' => ['sharemessage/addthis'],
-              'drupalSettings' => array(
-                'addthis_config' => array(
-                  'data_track_addressbar' => TRUE,
-                ),
+          '#attached' => array(
+            'library' => ['sharemessage/addthis'],
+            'drupalSettings' => array(
+              'addthis_config' => array(
+                'data_track_addressbar' => TRUE,
               ),
             ),
           ),
