@@ -111,7 +111,7 @@ class SettingsForm extends ConfigFormBase {
     parent::submitForm($form, $form_state);
 
     // If the profile id changes then we need to rebuild the library cache.
-    Cache::deleteTags(['library_info']);
+    Cache::invalidateTags(['library_info']);
 
     $this->configFactory->get('sharemessage.settings')
       ->set('addthis_profile_id', $form_state->getValue('addthis_profile_id'))
