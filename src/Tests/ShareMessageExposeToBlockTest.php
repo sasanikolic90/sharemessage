@@ -9,7 +9,7 @@ namespace Drupal\sharemessage\Tests;
 /**
  * Check if sharemessage is exposed as block.
  *
- * @group Sharemessage
+ * @group sharemessage
  */
 class ShareMessageExposeToBlockTest extends ShareMessageTestBase {
 

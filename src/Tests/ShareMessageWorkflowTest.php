@@ -11,7 +11,7 @@ use Drupal\Core\Url;
 /**
  * Main sharemessage workflow through the admin UI.
  *
- * @group Sharemessage
+ * @group sharemessage
  */
 class ShareMessageWorkflowTest extends ShareMessageTestBase {
 

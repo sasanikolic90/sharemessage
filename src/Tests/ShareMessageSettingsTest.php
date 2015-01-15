@@ -9,7 +9,7 @@ namespace Drupal\sharemessage\Tests;
 /**
  * Check if default and sharemessage specific settings work correctly.
  *
- * @group Sharemessage
+ * @group sharemessage
  */
 class ShareMessageSettingsTest extends ShareMessageTestBase {
 
