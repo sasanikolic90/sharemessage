@@ -240,11 +240,4 @@ class ShareMessageForm extends EntityForm {
     $form_state->setRedirect('sharemessage.sharemessage_list');
   }
 
-  /**
-   * Overrides Drupal\Core\Entity\EntityFormController::delete().
-   */
-  public function delete(array $form, FormStateInterface $form_state) {
-    $form_state->setRedirect('sharemessage.sharemessage_edit', array('sharemessage' => $this->entity->id()));
-  }
-
 }

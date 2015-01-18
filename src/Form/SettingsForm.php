@@ -20,6 +20,15 @@ class SettingsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
+  protected function getEditableConfigNames() {
+    return [
+      'sharemessage.settings',
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getFormID() {
     return 'sharemessage_addthis_settings';
   }
@@ -29,7 +38,7 @@ class SettingsForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state, Request $request = NULL) {
 
-    $config = $this->configFactory->get('sharemessage.settings');
+    $config = $this->config('sharemessage.settings');
 
     $form['addthis_profile_id'] = array(
       '#title' => t('AddThis Profile ID'),
@@ -113,7 +122,7 @@ class SettingsForm extends ConfigFormBase {
     // If the profile id changes then we need to rebuild the library cache.
     Cache::invalidateTags(['library_info']);
 
-    $this->configFactory->get('sharemessage.settings')
+    $this->config('sharemessage.settings')
       ->set('addthis_profile_id', $form_state->getValue('addthis_profile_id'))
       ->set('services', $form_state->getValue('default_services'))
       ->set('additional_services', $form_state->getValue('default_additional_services'))
@@ -124,8 +133,6 @@ class SettingsForm extends ConfigFormBase {
       ->set('shared_video_width', $form_state->getValue('shared_video_width'))
       ->set('shared_video_height', $form_state->getValue('shared_video_height'))
       ->save();
-
-
-
   }
+
 }

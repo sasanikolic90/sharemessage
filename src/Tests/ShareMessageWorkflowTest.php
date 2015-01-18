@@ -87,7 +87,7 @@ class ShareMessageWorkflowTest extends ShareMessageTestBase {
     $this->assertRaw('addthis:description="' . $edit['message_long'] . '"', t('Overridden sharemessage has OG data as attributes.'));
 
     // Disable enforcement of overrides in the global settings.
-    \Drupal::config('sharemessage.settings')->set('message_enforcement', FALSE)->save();
+    $this->config('sharemessage.settings')->set('message_enforcement', FALSE)->save();
     $this->drupalGet('sharemessage-test/sharemessage_test_label', array('query' => array('smid' => 'sharemessage_test_label2')));
 
     // Check if the og:description tag gets rendered correctly.

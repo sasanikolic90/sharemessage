@@ -14,8 +14,8 @@ sharemessage.sharemessage_add:
   requirements:
     _entity_create_access: sharemessage
 
-sharemessage.sharemessage_edit:
-  path: 'admin/config/services/sharemessage/manage/{sharemessage}'
+entity.sharemessage.edit_form:
+  path: '/admin/config/services/sharemessage/manage/{sharemessage}'
   defaults:
     _title: 'Edit share message'
     _entity_form: sharemessage.edit
