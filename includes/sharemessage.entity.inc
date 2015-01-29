@@ -17,28 +17,26 @@ class ShareMessage extends Entity {
   public function buildContent($view_mode = 'full', $langcode = NULL) {
     $profileid = variable_get('sharemessage_addthis_profile_id', 1);
 
-    $context = array('sharemessage' => $this);
+    $context = array('sharemessage' => $this, 'view_mode' => $view_mode);
     if ($node = menu_get_object()) {
       $context['node'] = $node;
     }
     drupal_alter('sharemessage_token_context', $this, $context);
 
-    // Add OG Tags to the page.
-    $addThis_attributes = FALSE;
-    if (strpos(drupal_get_html_head(), 'property="og:') == FALSE && empty($context['_force_attributes'])) {
+    // Add OG Tags to the page if there are none added yet and a corresponding
+    // view mode was set (or it was altered into such a view mode above).
+    $og_view_modes = array('full', 'only_og_tags', 'no_attributes');
+    if (strpos(drupal_get_html_head(), 'property="og:') == FALSE && in_array($context['view_mode'], $og_view_modes)) {
       $this->addOGTags($context);
     }
-    else {
-      $addThis_attributes = TRUE;
-    }
-    unset($context['_force_attributes']);
 
     // Add addThis buttons.
     $content = array();
-    if ($view_mode == 'full') {
+    if ($view_mode != 'only_og_tags') {
+      $attributes_view_modes = array('full', 'attributes_only');
       $content['addthis'] = array(
         '#type' => 'container',
-        '#attributes' => $addThis_attributes ? $this->buildAdditionalAttributes($context) : $this->buildAttributes(),
+        '#attributes' => in_array($context['view_mode'], $attributes_view_modes) ? $this->buildAdditionalAttributes($context) : $this->buildAttributes(),
         'services' => array(
           '#markup' => $this->build_services_part($context),
         ),

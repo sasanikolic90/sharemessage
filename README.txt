@@ -85,6 +85,31 @@ can be done by following the "Import share message" link on the same page. Just
 paste your exported sharemessage code and import it.
 
 
+VIEW MODES
+----------
+Share Message uses view modes to control OG tags and attributes, the following
+view modes are provided:
+
+ - "Share links with OG tags and AddThis attributes": Both OG tags and the
+   AddThis attributes get rendered (this is the default and recommended setting)
+
+ - "Only OG tags": Renders only OG tags, not displaying any share link. This
+   is useful if you have a share link that points to another page where you
+   don't want any share link to appear
+
+ - "Share links with OG tags only": Display the share links and OG tags but
+   without the AddThis attributes on the share links container
+
+ - "Share links with AddThis attributes only": Renders No OG tags on the page
+
+Note on backwards compatibility:
+Previously, the output was only partially controlled through view modes, and
+attributes were not added by default, only if multiple share messages were
+displayed on a page. A special flag "_force_attributes" existed, that modules
+could set through hook_sharemessage_token_context_alter(). As this behavior
+is now the default, the flag was removed as share widgets now always work as if
+that flag was set.
+
 TESTING SHARES ON FACEBOOK
 -------------
 In order to test your shares on facebook, you can share your nodes or pages the

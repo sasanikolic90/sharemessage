@@ -42,11 +42,19 @@ function sharemessage_entity_info() {
       ),
       'view modes' => array(
         'full' => array(
-          'label' => t('Full content'),
+          'label' => t('Share links with OG tags and AddThis attributes'),
           'custom settings' => FALSE,
         ),
         'only_og_tags' => array(
-          'label' => t('Only og tags'),
+          'label' => t('Only OG tags'),
+          'custom settings' => FALSE,
+        ),
+        'no_attributes' => array(
+          'label' => t('Share links with OG tags only'),
+          'custom settings' => FALSE,
+        ),
+        'attributes_only' => array(
+          'label' => t('Share links with AddThis attributes only'),
           'custom settings' => FALSE,
         ),
       ),
@@ -417,7 +425,8 @@ function sharemessage_form_submit($form, &$form_state) {
  * Entity view callback.
  */
 function sharemessage_view(ShareMessage $sharemessage) {
-  return entity_view($sharemessage->entityType(), array($sharemessage), 'full', NULL, TRUE);
+  $view_mode = variable_get('sharemessage_view_default_view_mode', 'full');
+  return entity_view($sharemessage->entityType(), array($sharemessage), $view_mode, NULL, TRUE);
 }
 
 /**

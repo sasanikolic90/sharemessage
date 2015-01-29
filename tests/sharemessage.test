@@ -236,3 +236,98 @@ class ShareMessageSettingsTestCase extends ShareMessageTestCase {
     $this->assertRaw($raw_html_default_icon_style, t('Default icon style is used.'));
   }
 }
+
+class ShareMessageViewModesTest extends ShareMessageTestCase {
+
+  public static function getInfo() {
+    return array(
+      'name' => 'ShareMessage view modes',
+      'description' => 'Verifies the output of ShareMessage entities different view modes.',
+      'group' => 'ShareMessage',
+    );
+  }
+
+  /**
+   * Checks whether view modes render expected markup.
+   */
+  public function testShareMessageViewModes() {
+    $edit = array(
+      'label' => 'ShareMessage Test Label',
+      'name' => 'sharemessage_test_label',
+      'sharemessage_title[en][0][value]' => 'ShareMessage Test Title',
+      'sharemessage_long[en][0][value]' => 'ShareMessage Test Long Description',
+      'sharemessage_short[en][0][value]' => 'ShareMessage Test Short Description',
+      'sharemessage_image_url[und][0][value]' => 'http://www.example.com/drupal.jpg',
+      'sharemessage_url[und][0][value]' => 'http://www.example.com',
+    );
+    $this->drupalPost('admin/config/services/sharemessage/add', $edit, t('Save share message'));
+    $this->assertText(t('Message @label saved.', array('@label' => $edit['label'])), t('ShareMessage is successfully saved.'));
+
+    $this->drupalGet('sharemessage-test/1');
+    $this->assertShareButtons($edit, TRUE);
+    $this->assertOGTags($edit['sharemessage_title[en][0][value]']);
+
+    variable_set('sharemessage_view_default_view_mode', 'only_og_tags');
+    $this->drupalGet('sharemessage-test/1');
+    $this->assertShareButtons($edit, FALSE, TRUE);
+    $this->assertOGTags($edit['sharemessage_title[en][0][value]']);
+
+    variable_set('sharemessage_view_default_view_mode', 'no_attributes');
+    $this->drupalGet('sharemessage-test/1');
+    $this->assertShareButtons($edit);
+    $this->assertOGTags($edit['sharemessage_title[en][0][value]']);
+
+    variable_set('sharemessage_view_default_view_mode', 'attributes_only');
+    $this->drupalGet('sharemessage-test/1');
+    $this->assertShareButtons($edit, TRUE, FALSE);
+    $this->assertOGTags($edit['sharemessage_title[en][0][value]'], TRUE);
+  }
+
+  /**
+   * Checks the markup of the share links wrapper.
+   *
+   * @param $sharemessage
+   *   The edit array of a ShareMessage as passed to drupalPost().
+   * @param bool $addthis_attributes
+   *   Flag indicating whether or not to check for AddThis attributes.
+   * @param bool $invert
+   *   Set to true to invert the assertion, for example to make sure the share
+   *   links don't get rendered.
+   */
+  protected function assertShareButtons($sharemessage, $addthis_attributes = FALSE, $invert = FALSE) {
+    $raw_html_icon_style = '<div class="addthis_toolbox addthis_default_style addthis_16x16_style"';
+    if ($addthis_attributes) {
+      $raw_html_icon_style .= ' addthis:url="' . $sharemessage['sharemessage_url[und][0][value]'];
+      $raw_html_icon_style .= '" addthis:title="' . $sharemessage['sharemessage_title[en][0][value]'];
+      $raw_html_icon_style .= '" addthis:description="' . $sharemessage['sharemessage_long[en][0][value]'] . '"';
+    }
+    $raw_html_icon_style .= '>';
+
+    if ($invert) {
+      $this->assertNoRaw($raw_html_icon_style);
+    }
+    else {
+      $this->assertRaw($raw_html_icon_style);
+    }
+  }
+
+  /**
+   * Checks for the markup of the OG meta tags.
+   *
+   * @param $title
+   *   The title of the ShareMessage as should get printed to og:title.
+   * @param bool $invert
+   *   Set to true to invert the assertion, for example to make sure the OG tags
+   *   are not rendered.
+   */
+  protected function assertOGTags($title, $invert = FALSE) {
+    $meta_title = '<meta property="og:title" content="' . $title . '" />';
+    if ($invert) {
+      $this->assertNoRaw($meta_title);
+    }
+    else {
+      $this->assertRaw($meta_title);
+    }
+  }
+
+}
