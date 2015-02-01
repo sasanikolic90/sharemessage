@@ -322,7 +322,7 @@ class ShareMessage extends ConfigEntityBase {
       return $url->toString();
     }
     else {
-      return Url::fromUri('base://' . $uri, $options)->toString();
+      return Url::fromUri('user-path:' . $uri, $options)->toString();
     }
   }
 
