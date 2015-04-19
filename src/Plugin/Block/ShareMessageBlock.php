@@ -7,6 +7,7 @@
 
 namespace Drupal\sharemessage\Plugin\Block;
 
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -82,7 +83,7 @@ class ShareMessageBlock extends BlockBase implements ContainerFactoryPluginInter
    * {@inheritdoc}
    */
   public function blockAccess(AccountInterface $account) {
-    return $account->hasPermission('view sharemessages');
+    return AccessResult::allowedIfHasPermission($account, 'view sharemessages');
   }
 
   /**
