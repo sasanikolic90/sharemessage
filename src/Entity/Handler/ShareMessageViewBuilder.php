@@ -34,7 +34,10 @@ class ShareMessageViewBuilder extends EntityViewBuilder {
 
     $build = array();
     foreach ($entities as $entity) {
+      /* @var \Drupal\sharemessage\Entity\ShareMessage $entity */
 
+      // EntityViewController expects the entity to be in #sharemessage.
+      $build[$entity->id()]['#sharemessage'] = $entity;
 
       $context = $entity->getContext();
 
