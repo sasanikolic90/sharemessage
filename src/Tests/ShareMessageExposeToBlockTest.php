@@ -44,7 +44,7 @@ class ShareMessageExposeToBlockTest extends ShareMessageTestBase {
     $this->assertText($block['settings[label]']);
 
     // Go to front page and check whether sharemessage is displayed.
-    $this->drupalGet('/');
+    $this->drupalGet('');
     $raw_html_string = '<div class="addthis_toolbox addthis_default_style addthis_16x16_style"';
     $this->assertRaw($raw_html_string, 'AddThis buttons are displayed as block on homepage.');
   }
