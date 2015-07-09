@@ -82,4 +82,46 @@ class ShareMessageSettingsTest extends ShareMessageTestBase {
     $raw_html_default_icon_style = '<div class="addthis_toolbox addthis_default_style ' . $default_settings['default_icon_style'] . '"';
     $this->assertRaw($raw_html_default_icon_style, t('Default icon style is used.'));
   }
+
+  /**
+   * Test case for the delete and cancel button functionality for ShareMessage.
+   */
+  function testShareMessageDeleteCancel() {
+    // Create a share message.
+    $this->drupalGet('admin/config/services/sharemessage/add');
+    $sharemessage = [
+      'label' => 'ShareMessage Test Label',
+      'id' => 'sharemessage_test_label',
+      'override_default_settings' => 1,
+      'settings[services][]' => [
+        'facebook',
+      ],
+      'settings[additional_services]' => 1,
+      'settings[icon_style]' => 'addthis_32x32_style',
+    ];
+    $this->drupalPostForm(NULL, $sharemessage, t('Save'));
+
+    // Check newly created ShareMessage on list page.
+    $this->drupalGet('admin/config/services/sharemessage/list');
+    $this->assertText($sharemessage['label'], 'Newly created sharemessage found.');
+    // Check for Edit link.
+    $this->assertLink('Edit');
+    // Check for the Delete link.
+    $this->assertLink('Delete');
+
+    // Click delete link on admin ui.
+    $this->clickLink('Delete');
+    $this->assertText(t('Are you sure you want to delete @label?', ['@label' => $sharemessage['label']]));
+
+    // Check if cancel button is present or not.
+    $this->assertLink('Cancel');
+
+    // Delete the share message.
+    $this->drupalPostForm(NULL, [], t('Delete'));
+    $this->assertText(t('ShareMessage @label has been deleted.', ['@label' => $sharemessage['label']]));
+
+    // Check if removed from listing page as well.
+    $this->drupalGet('admin/config/services/sharemessage/list');
+    $this->assertNoText($sharemessage['label'], 'Not found the deleted message.');
+  }
 }

@@ -9,6 +9,7 @@ namespace Drupal\sharemessage\Form;
 
 use Drupal\Core\Entity\EntityConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 
 /**
  * Builds the form to delete a ShareMessage config entity.
@@ -26,9 +27,7 @@ class ShareMessageDeleteForm extends EntityConfirmFormBase {
    * {@inheritdoc}
    */
   public function getCancelUrl() {
-    return array(
-      'route_name' => 'sharemessage.sharemessage_list',
-    );
+    return new Url('sharemessage.sharemessage_list');
   }
 
   /**
@@ -41,7 +40,7 @@ class ShareMessageDeleteForm extends EntityConfirmFormBase {
   /**
    * {@inheritdoc}
    */
-  public function submit(array $form, FormStateInterface $form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->entity->delete();
     drupal_set_message(t('ShareMessage %label has been deleted.', array('%label' => $this->entity->label())));
     \Drupal::logger('sharemessage')->notice('ShareMessage %label has been deleted.', array('%label' => $this->entity->label()));

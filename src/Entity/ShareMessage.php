@@ -30,7 +30,8 @@ use Drupal\Core\Url;
  *     "label" = "label"
  *   },
  *   links = {
- *     "edit-form" = "/admin/config/services/sharemessage/manage/{sharemessage}"
+ *     "edit-form" = "/admin/config/services/sharemessage/manage/{sharemessage}",
+ *     "delete-form" = "/admin/config/services/sharemessage/manage/{sharemessage}/delete"
  *   }
  * )
  */

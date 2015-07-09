@@ -30,7 +30,7 @@ sharemessage.sharemessage_list:
   requirements:
     _permission: 'administer sharemessages'
 
-sharemessage.sharemessage_delete:
+entity.sharemessage.delete_form:
   path: 'admin/config/services/sharemessage/manage/{sharemessage}/delete'
   defaults:
     _entity_form: sharemessage.delete
