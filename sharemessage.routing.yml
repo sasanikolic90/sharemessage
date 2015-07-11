@@ -23,7 +23,7 @@ entity.sharemessage.edit_form:
     _entity_access: sharemessage.update
 
 sharemessage.sharemessage_list:
-  path: '/admin/config/services/sharemessage/list'
+  path: '/admin/config/services/sharemessage'
   defaults:
     _title: 'Share message list'
     _entity_list: 'sharemessage'

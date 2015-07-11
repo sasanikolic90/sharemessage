@@ -102,7 +102,7 @@ class ShareMessageSettingsTest extends ShareMessageTestBase {
     $this->drupalPostForm(NULL, $sharemessage, t('Save'));
 
     // Check newly created ShareMessage on list page.
-    $this->drupalGet('admin/config/services/sharemessage/list');
+    $this->drupalGet('admin/config/services/sharemessage');
     $this->assertText($sharemessage['label'], 'Newly created sharemessage found.');
     // Check for Edit link.
     $this->assertLink('Edit');
@@ -121,7 +121,7 @@ class ShareMessageSettingsTest extends ShareMessageTestBase {
     $this->assertText(t('ShareMessage @label has been deleted.', ['@label' => $sharemessage['label']]));
 
     // Check if removed from listing page as well.
-    $this->drupalGet('admin/config/services/sharemessage/list');
+    $this->drupalGet('admin/config/services/sharemessage');
     $this->assertNoText($sharemessage['label'], 'Not found the deleted message.');
   }
 }
