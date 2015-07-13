@@ -29,6 +29,19 @@ use Drupal\Core\Url;
  *     "id" = "id",
  *     "label" = "label"
  *   },
+ *   config_export = {
+ *     "id",
+ *     "label",
+ *     "override_default_settings",
+ *     "title",
+ *     "message_long",
+ *     "message_short",
+ *     "image_url",
+ *     "fallback_image",
+ *     "video_url",
+ *     "share_url",
+ *     "settings",
+ *   },
  *   links = {
  *     "edit-form" = "/admin/config/services/sharemessage/manage/{sharemessage}",
  *     "delete-form" = "/admin/config/services/sharemessage/manage/{sharemessage}/delete"
