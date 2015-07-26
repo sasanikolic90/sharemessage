@@ -8,12 +8,40 @@
 namespace Drupal\sharemessage\Form;
 
 use Drupal\Core\Entity\EntityForm;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Base form controller for ShareMessage edit forms.
  */
 class ShareMessageForm extends EntityForm {
+
+  /**
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
+   * Constructs a new ShareMessageForm object.
+   *
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface
+   *   The module handler.
+   */
+  public function __construct(ModuleHandlerInterface $module_handler) {
+    $this->moduleHandler = $module_handler;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('module_handler')
+    );
+  }
 
   /**
    * Overrides Drupal\Core\Entity\EntityFormController::form().
@@ -187,7 +215,7 @@ class ShareMessageForm extends EntityForm {
       );
     }
 
-    if (\Drupal::moduleHandler()->moduleExists('token')) {
+    if ($this->moduleHandler->moduleExists('token')) {
       $form['sharemessage_token_help'] = array(
         '#title' => t('Replacement patterns'),
         '#type' => 'fieldset',
