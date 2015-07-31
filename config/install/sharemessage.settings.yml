@@ -1,8 +1,9 @@
 addthis_profile_id: ''
-additional_services: TRUE
-counter: FALSE
-icon_style: 'addthis_16x16_style'
-message_enforcement: TRUE
-local_services_definition: FALSE
+additional_services: true
+counter: false
+icon_style: addthis_16x16_style
+message_enforcement: true
+local_services_definition: false
 shared_video_width: 360
 shared_video_height: 270
+services: {  }

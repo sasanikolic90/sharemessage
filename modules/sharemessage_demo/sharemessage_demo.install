@@ -1,0 +1,47 @@
+<?php
+/**
+ * @file
+ * Installation hooks for sharemessage_demo module.
+ */
+
+use Drupal\Core\Url;
+use Drupal\node\Entity\Node;
+
+
+/**
+ * Implements hook_install().
+ */
+function sharemessage_demo_install() {
+  // Ensure the translation fields are created in the database.
+  \Drupal::service('entity.definition_update_manager')->applyUpdates();
+
+  // Create an introduction node.
+  $description_node = Node::create([
+    'title' => t('Sharemessage demo'),
+    'type' => 'sharecontent',
+    'uid' => '0',
+    'body' => [
+      'value' => '<p>' . t('Welcome to the Sharemessage demo module!') . '</p>'
+        . '<p>' . t('This module provides an exportable entity of share widgets (ShareMessages) using the <a href="@addthis">AddThis</a> share widgets,. It can be used as a block and provides a settings page where the share widget is highly configurable.', ['@addthis' => Url::fromUri('http://www.addthis.com/')->toString()]) .'</p>'
+        . '<p>' . t('The Sharemessage demo module includes the configuration needed for enabling social media sharing widgets on a <a href="@drupal">Drupal</a> site.', ['@drupal' => Url::fromUri('https://www.drupal.org/')->toString()]) .'</p>'
+        . '<p>' . t('It contains the default <a href="@settings">share message settings</a> and adds a <a href="@demo">share message demo</a> with some dummy values to be shared to the <a href="@list">share message list</a>.', ['@settings' => Url::fromUri('base:admin/config/services/sharemessage/settings')->toString(), '@demo' => Url::fromUri('base:admin/config/services/sharemessage/manage/share_message_demo')->toString(), '@list' => Url::fromUri('base:admin/config/services/sharemessage')->toString()]) . '<p>'
+        . '<ul>'
+        . '  <li>' . t('The following share widgets are enabled by default:') . '</li>'
+        . '    <li>' . t('Print,') . '</li>'
+        . '    <li>' . t('Facebook,') . '</li>'
+        . '    <li>' . t('Twitter,') . '</li>'
+        . '    <li>' . t('Gmail,') . '</li>'
+        . '    <li>' . t('Pinterest,') . '</li>'
+        . '    <li>' . t('And many other...') . '</li>'
+        . '</ul>'
+        . '<p>' . t('To display the share widgets on the site, a simple <a href="@block">sharemessage block</a> is added to the top of the first sidebar. The visibility of the block is restricted only to sharecontents.', ['@block' => Url::fromUri('base:admin/structure/block/manage/sharemessage')->toString()]) .'</p>'
+        . '<p>' . t('To get started with the sharing, simply click on a widget in the left sidebar.') . '<p>',
+      'format' => 'basic_html',
+    ],
+  ]);
+  $description_node->save();
+
+  // Set the node as the front page.
+  \Drupal::configFactory()->getEditable('system.site')->set('page.front', '/node/' . $description_node->id())->save();
+
+}
