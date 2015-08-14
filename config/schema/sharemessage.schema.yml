@@ -1,6 +1,6 @@
 
 sharemessage.settings:
-  type: mapping
+  type: config_object
   mapping:
     addthis_profile_id:
       type: string
