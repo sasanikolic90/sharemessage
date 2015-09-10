@@ -64,6 +64,9 @@ class ShareMessageViewBuilder extends EntityViewBuilder {
           'additional_services' => array(
             '#markup' => $this->buildAdditionalServicesPart($entity),
           ),
+          '#cache' => [
+            'tags' => $entity->getCacheTags(),
+          ],
           '#attached' => array(
             'library' => ['sharemessage/addthis'],
             'drupalSettings' => array(

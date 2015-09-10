@@ -37,9 +37,13 @@ function sharemessage_library_info_alter(&$libraries, $extension) {
  */
 function sharemessage_page_attachments(&$page) {
   $smid = \Drupal::request()->query->get('smid');
-  if (!empty($smid) && \Drupal::config('sharemessage.settings')->get('message_enforcement')) {
+  $page['#cache']['contexts'][] = 'url.query_args:smid';
+  $config = \Drupal::config('sharemessage.settings');
+  \Drupal::service('renderer')->addCacheableDependency($page, $config);
+  if (!empty($smid) && $config->get('message_enforcement')) {
     $sharemessage = ShareMessage::load($smid);
     if ($sharemessage) {
+      \Drupal::service('renderer')->addCacheableDependency($page, $sharemessage);
       foreach ($sharemessage->buildOGTags($sharemessage->getContext()) as $tag) {
         $page['#attached']['html_head'][] = [
           $tag,
