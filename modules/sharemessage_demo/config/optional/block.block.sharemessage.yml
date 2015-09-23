@@ -19,8 +19,6 @@ settings:
   label: 'Share message'
   provider: sharemessage
   label_display: visible
-  cache:
-    max_age: -1
   sharemessage: share_message_demo
 visibility:
   node_type:
