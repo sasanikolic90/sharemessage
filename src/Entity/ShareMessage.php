@@ -333,7 +333,7 @@ class ShareMessage extends ConfigEntityBase {
     }
     // Try to find a matching route.
     elseif ($url = \Drupal::pathValidator()->getUrlIfValid($uri)) {
-      return $url->toString();
+      return $url->setAbsolute()->toString();
     }
     else {
       return Url::fromUri('internal:/' . $uri, $options)->toString();
