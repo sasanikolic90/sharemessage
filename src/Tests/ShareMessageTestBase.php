@@ -26,5 +26,7 @@ abstract class ShareMessageTestBase extends WebTestBase {
 
     $admin_user = $this->drupalCreateUser($permissions);
     $this->drupalLogin($admin_user);
+
+    $this->drupalPlaceBlock('page_title_block');
   }
 }
