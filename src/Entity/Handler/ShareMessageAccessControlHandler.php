@@ -21,7 +21,7 @@ class ShareMessageAccessControlHandler extends EntityAccessControlHandler {
   /**
    * {@inheritdoc}
    */
-  public function checkAccess(EntityInterface $entity, $operation, $langcode, AccountInterface $account) {
+  public function checkAccess(EntityInterface $entity, $operation, AccountInterface $account) {
     if ($operation == 'delete' || $operation == 'update') {
       return AccessResult::allowedIfHasPermission($account, 'administer sharemessages');
     }
