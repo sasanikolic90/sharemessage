@@ -53,13 +53,13 @@ class ShareMessageSettingsTest extends ShareMessageTestBase {
     $raw_html_icon_style = '<div class="addthis_toolbox addthis_default_style ' . $sharemessage['settings[icon_style]'] . '"';
 
     // Check services (facebook_like button should not be displayed).
-    $this->assertNoRaw($raw_html_services, t('Facebook like button that is globally enabled is not displayed on the page, so that the global settings are overridden.'));
+    $this->assertNoRaw($raw_html_services, 'Facebook like button that is globally enabled is not displayed on the page, so that the global settings are overridden.');
 
     // Additional services should be displayed.
-    $this->assertRaw($raw_html_additional_services, t('Additional services button is displayed, so that the global settings are overridden.'));
+    $this->assertRaw($raw_html_additional_services, 'Additional services button is displayed, so that the global settings are overridden.');
 
     // Check icon style.
-    $this->assertRaw($raw_html_icon_style, t('Icon style is changed to "' . $sharemessage['settings[icon_style]'] . '" so that the global settings are overridden.'));
+    $this->assertRaw($raw_html_icon_style, 'Icon style is changed to "' . $sharemessage['settings[icon_style]'] . '" so that the global settings are overridden.');
 
     // Step 4: Uncheck "Override default settings" checkbox.
     $this->drupalGet('admin/config/services/sharemessage/manage/' . $sharemessage['id']);
@@ -73,14 +73,14 @@ class ShareMessageSettingsTest extends ShareMessageTestBase {
     $this->drupalGet('sharemessage-test/sharemessage_test_label');
 
     // Check services (facebook_like button should be displayed).
-    $this->assertRaw($raw_html_services, t('Facebook like button is displayed as it is globally configured.'));
+    $this->assertRaw($raw_html_services, 'Facebook like button is displayed as it is globally configured.');
 
     // Additional services button should not be displayed.
-    $this->assertNoRaw($raw_html_additional_services, t('Additional services buttion is not displayed as it is globally configured.'));
+    $this->assertNoRaw($raw_html_additional_services, 'Additional services buttion is not displayed as it is globally configured.');
 
     // Check icon style (should be addthis_16x16_style).
     $raw_html_default_icon_style = '<div class="addthis_toolbox addthis_default_style ' . $default_settings['default_icon_style'] . '"';
-    $this->assertRaw($raw_html_default_icon_style, t('Default icon style is used.'));
+    $this->assertRaw($raw_html_default_icon_style, 'Default icon style is used.');
   }
 
   /**

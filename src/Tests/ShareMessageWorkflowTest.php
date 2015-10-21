@@ -32,25 +32,25 @@ class ShareMessageWorkflowTest extends ShareMessageTestBase {
       'share_url' => 'http://www.example.com',
     );
     $this->drupalPostForm(NULL, $edit, t('Save'));
-    $this->assertText(t('ShareMessage @label has been added.', array('@label' => $edit['label'])), t('ShareMessage is successfully saved.'));
+    $this->assertText(t('ShareMessage @label has been added.', array('@label' => $edit['label'])), 'ShareMessage is successfully saved.');
 
     // Step 2: Display share message and verify AddThis markup
     // and meta header elements.
     $this->drupalGet('sharemessage-test/sharemessage_test_label');
     $raw_html_string = '<div class="addthis_toolbox addthis_default_style addthis_16x16_style">';
-    $this->assertRaw($raw_html_string, t('AddThis buttons are displayed.'));
+    $this->assertRaw($raw_html_string, 'AddThis buttons are displayed.');
 
     $meta_title = '<meta property="og:title" content="' . $edit['title'] . '" />';
-    $this->assertRaw($meta_title, t('OG:title exists and has appropriate content.'));
+    $this->assertRaw($meta_title, 'og:title exists and has appropriate content.');
 
     $meta_description = '<meta property="og:description" content="' . $edit['message_long'] . '" />';
-    $this->assertRaw($meta_description, t('OG:description exists and has appropriate content.'));
+    $this->assertRaw($meta_description, 'og:description exists and has appropriate content.');
 
     $meta_image = '<meta property="og:image" content="' . $edit['image_url'] . '" />';
-    $this->assertRaw($meta_image, t('OG:image exists and has appropriate content.'));
+    $this->assertRaw($meta_image, 'og:image exists and has appropriate content.');
 
     $meta_url = '<meta property="og:url" content="' . $edit['share_url'] . '" />';
-    $this->assertRaw($meta_url, t('OG:url exists and has appropriate content.'));
+    $this->assertRaw($meta_url, 'og:url exists and has appropriate content.');
 
     $this->drupalGet('admin/config/services/sharemessage/add');
     // Check if the enforce checkbox is there.
@@ -75,16 +75,16 @@ class ShareMessageWorkflowTest extends ShareMessageTestBase {
 
     // Check if the og:description tag gets rendered correctly.
     $meta_description = '<meta property="og:description" content="' . $edit_2['message_long'] . '" />';
-    $this->assertRaw($meta_description, t('OG:description was overridden properly.'));
+    $this->assertRaw($meta_description, 'og:description was overridden properly.');
     // Check if the og:url tag gets rendered correctly.
     $url = Url::fromUri($edit['share_url'], array('query' => array('smid' => 'sharemessage_test_label2')))->toString();
     $meta_url = '<meta property="og:url" content="' . $url . '" />';
-    $this->assertRaw($meta_url, t('OG:url has correct query string.'));
+    $this->assertRaw($meta_url, 'og:url has correct query string.');
     $meta_url = '<meta property="og:url" content="' . $edit['share_url'] . '" />';
-    $this->assertNoRaw($meta_url, t('Suppressing og:url meta tag for overridden sharemessage.'));
+    $this->assertNoRaw($meta_url, 'Suppressing og:url meta tag for overridden sharemessage.');
 
     // Check if the overridden sharemessage is rendered correctly.
-    $this->assertRaw('addthis:description="' . $edit['message_long'] . '"', t('Overridden sharemessage has OG data as attributes.'));
+    $this->assertRaw('addthis:description="' . $edit['message_long'] . '"', 'Overridden sharemessage has og data as attributes.');
 
     // Disable enforcement of overrides in the global settings.
     $this->config('sharemessage.settings')->set('message_enforcement', FALSE)->save();
@@ -92,9 +92,9 @@ class ShareMessageWorkflowTest extends ShareMessageTestBase {
 
     // Check if the og:description tag gets rendered correctly.
     $meta_description = '<meta property="og:description" content="' . $edit['message_long'] . '" />';
-    $this->assertRaw($meta_description, t('OG:description was not overridden.'));
+    $this->assertRaw($meta_description, 'og:description was not overridden.');
     // Check if the og:url tag gets rendered correctly.
     $meta_url = '<meta property="og:url" content="' . $edit['share_url'] . '" />';
-    $this->assertRaw($meta_url, t('OG:url does not contain query string.'));
+    $this->assertRaw($meta_url, 'og:url does not contain query string.');
   }
 }
