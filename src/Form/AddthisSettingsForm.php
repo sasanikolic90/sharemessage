@@ -40,6 +40,15 @@ class AddthisSettingsForm extends ConfigFormBase {
 
     $config = $this->config('sharemessage.addthis');
 
+    // Global setting.
+    $form['message_enforcement'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Global: Allow to enforce share messages'),
+      '#description' => t('This will enforce loading of a sharemessage if the ?smid argument is present in an URL. If something else on your site is using this argument, disable this this option.'),
+      '#default_value' => $config->get('message_enforcement'),
+    );
+
+    // AddThis specific settings.
     $form['addthis_profile_id'] = array(
       '#title' => t('AddThis Profile ID'),
       '#type' => 'textfield',
@@ -82,13 +91,6 @@ class AddthisSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('icon_style'),
     );
 
-    $form['message_enforcement'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Allow to enforce share messages'),
-      '#description' => t('This will enforce loading of a sharemessage if the ?smid argument is present in an URL. If something else on your site is using this argument, disable this this option.'),
-      '#default_value' => $config->get('message_enforcement'),
-    );
-
     $form['local_services_definition'] = array(
       '#type' => 'checkbox',
       '#title' => t('Use local service definitions file'),
@@ -123,12 +125,12 @@ class AddthisSettingsForm extends ConfigFormBase {
     Cache::invalidateTags(['library_info']);
 
     $this->config('sharemessage.addthis')
+      ->set('message_enforcement', $form_state->getValue('message_enforcement'))
       ->set('addthis_profile_id', $form_state->getValue('addthis_profile_id'))
       ->set('services', $form_state->getValue('default_services'))
       ->set('additional_services', $form_state->getValue('default_additional_services'))
       ->set('counter', $form_state->getValue('default_counter'))
       ->set('icon_style', $form_state->getValue('default_icon_style'))
-      ->set('message_enforcement', $form_state->getValue('message_enforcement'))
       ->set('local_services_definition', $form_state->getValue('local_services_definition'))
       ->set('shared_video_width', $form_state->getValue('shared_video_width'))
       ->set('shared_video_height', $form_state->getValue('shared_video_height'))
