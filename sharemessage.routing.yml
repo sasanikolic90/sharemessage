@@ -1,8 +1,8 @@
-sharemessage.settings:
-  path: '/admin/config/services/sharemessage/settings'
+sharemessage.addthis.settings:
+  path: '/admin/config/services/sharemessage/addthis-settings'
   defaults:
-    _title: 'Share message settings'
-    _form: '\Drupal\sharemessage\Form\SettingsForm'
+    _title: 'AddThis settings'
+    _form: '\Drupal\sharemessage\Form\AddthisSettingsForm'
   requirements:
     _permission: 'administer sharemessages'
 

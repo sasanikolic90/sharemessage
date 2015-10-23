@@ -2,14 +2,18 @@
 
 /**
  * @file
- * Definition of \Drupal\sharemessage\Entity\Controller\ShareMessageFormController.
+ * Contains \Drupal\sharemessage\Form\ShareMessageForm.
  */
 
 namespace Drupal\sharemessage\Form;
 
+use Drupal\Component\Utility\Xss;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
+use Drupal\sharemessage\Entity\ShareMessage;
+use Drupal\sharemessage\SharePluginManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -25,13 +29,21 @@ class ShareMessageForm extends EntityForm {
   protected $moduleHandler;
 
   /**
+   * Share plugin manager.
+   *
+   * @var \Drupal\sharemessage\SharePluginManager
+   */
+  protected $sharePluginManager;
+
+  /**
    * Constructs a new ShareMessageForm object.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface
    *   The module handler.
    */
-  public function __construct(ModuleHandlerInterface $module_handler) {
+  public function __construct(ModuleHandlerInterface $module_handler, SharePluginManager $share_manager) {
     $this->moduleHandler = $module_handler;
+    $this->sharePluginManager = $share_manager;
   }
 
   /**
@@ -39,7 +51,8 @@ class ShareMessageForm extends EntityForm {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('plugin.manager.sharemessage.share')
     );
   }
 
@@ -49,8 +62,10 @@ class ShareMessageForm extends EntityForm {
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
 
+    /** @var ShareMessage $sharemessage */
     $sharemessage = $this->entity;
-    $defaults = \Drupal::config('sharemessage.settings');
+    $defaults = \Drupal::config('sharemessage.addthis');
+    $available = $this->sharePluginManager->getLabels();
 
     $form['label'] = array(
       '#type' => 'textfield',
@@ -130,87 +145,54 @@ class ShareMessageForm extends EntityForm {
       '#weight' => 25,
     );
 
-    // Settings fieldset.
-    $form['override_default_settings'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Override default settings'),
-      '#default_value' => $sharemessage->override_default_settings,
-      '#weight' => 30,
-    );
+    // If the ShareMessage plugin is not set, pick the first available plugin as
+    // the default.
+    if (!($sharemessage->hasPlugin())) {
+      $sharemessage->setPluginID(key($available));
+    }
 
-    $form['settings'] = array(
-      '#type' => 'fieldset',
-      '#tree' => TRUE,
-      '#weight' => 35,
-      '#states' => array(
-        'invisible' => array(
-          ':input[name="override_default_settings"]' => array('checked' => FALSE),
+    $definition = $this->sharePluginManager->getDefinition($sharemessage->getPluginID());
+    if ($sharemessage->hasPlugin()) {
+      $form['plugin_wrapper']['plugin'] = array(
+        '#type' => 'select',
+        '#title' => t('ShareMessage plugin'),
+        '#description' => isset($definition['description']) ? Xss::filter($definition['description']) : '',
+        '#options' => $available,
+        '#default_value' => $sharemessage->getPluginID(),
+        '#required' => TRUE,
+        '#ajax' => array(
+          'callback' => array($this, 'ajaxShareMessagePluginSelect'),
+          'wrapper' => 'sharemessage-plugin-wrapper',
         ),
-      ),
-    );
+      );
+      $form['plugin_wrapper']['plugin_select'] = array(
+        '#type' => 'submit',
+        '#value' => $this->t('Select plugin'),
+        '#submit' => array('::ajaxShareMessagePluginSelect'),
+        '#attributes' => array('class' => array('js-hide')),
+      );
 
-    $form['settings']['services'] = array(
-      '#type' => 'select',
-      '#title' => t('Visible services'),
-      '#multiple' => TRUE,
-      '#options' => sharemessage_get_addthis_services(),
-      '#default_value' => !empty($sharemessage->settings['services']) ? $sharemessage->settings['services'] : $defaults->get('services'),
-      '#size' => 10,
-      '#states' => array(
-        'invisible' => array(
-          ':input[name="override_default_settings"]' => array('checked' => FALSE),
-        ),
-      ),
-    );
+      $form['plugin_wrapper']['settings'] = array(
+        '#type' => 'details',
+        '#title' => t('@plugin plugin settings', array('@plugin' => $definition['label'])),
+        '#tree' => TRUE,
+        '#open' => TRUE,
+      );
 
-    $form['settings']['additional_services'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Show additional services button'),
-      '#default_value' => isset($sharemessage->settings['additional_services']) ? $sharemessage->settings['additional_services'] : $defaults->get('additional_services'),
-      '#states' => array(
-        'invisible' => array(
-          ':input[name="override_default_settings"]' => array('checked' => FALSE),
-        ),
-      ),
-    );
-
-    $form['settings']['counter'] = array(
-      '#type' => 'select',
-      '#title' => t('Show Addthis counter'),
-      '#empty_option' => t('No'),
-      '#options' => array(
-        'addthis_pill_style' => t('Pill style'),
-        'addthis_bubble_style' => t('Bubble style'),
-      ),
-      '#default_value' => isset($sharemessage->settings['counter']) ? $sharemessage->settings['counter'] : $defaults->get('counter'),
-      '#states' => array(
-        'invisible' => array(
-          ':input[name="override_default_settings"]' => array('checked' => FALSE),
-        ),
-      ),
-    );
-
-    $form['settings']['icon_style'] = array(
-      '#type' => 'radios',
-      '#title' => t('Icon style'),
-      '#options' => array(
-        'addthis_16x16_style' => '16x16 pix',
-        'addthis_32x32_style' => '32x32 pix',
-      ),
-      '#default_value' => isset($sharemessage->settings['icon_style']) ? $sharemessage->settings['icon_style'] : $defaults->get('icon_style'),
-      '#states' => array(
-        'invisible' => array(
-          ':input[name="override_default_settings"]' => array('checked' => FALSE),
-        ),
-      ),
-    );
+      // Add the ShareMessage plugin settings form.
+      $form['plugin_wrapper']['settings'] += $sharemessage->getPlugin()
+        ->buildConfigurationForm($form['plugin_wrapper']['settings'], $form_state);
+      if (!Element::children($form['plugin_wrapper']['settings'])) {
+        $form['#description'] = t("The @plugin plugin doesn't provide any settings.", array('@plugin' => $sharemessage->getPluginDefinition()['label']));
+      }
+    }
 
     if ($defaults->get('message_enforcement')) {
       $form['enforce_usage'] = array(
         '#type' => 'checkbox',
         '#title' => t('Enforce the usage of this share message on the page it points to'),
         '#description' => t('If checked, this sharemessage will be used on the page that it is referring to and override the sharemessage there.'),
-        '#default_value' => isset($sharemessage->settings['enforce_usage']) ? $sharemessage->settings['enforce_usage'] : 0,
+        '#default_value' => $sharemessage->enforce_usage ?: 0,
         '#weight' => 40,
       );
     }
@@ -235,35 +217,38 @@ class ShareMessageForm extends EntityForm {
     return $form;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function buildEntity(array $form, FormStateInterface $form_state) {
+    /** @var ShareMessage $sharemessage */
     $sharemessage = parent::buildEntity($form, $form_state);
-    if (!$sharemessage->override_default_settings) {
+    if (!$sharemessage->getSetting('override_default_settings')) {
       $sharemessage->settings = array();
     }
 
     // Move the override field into the settings array.
-    if (\Drupal::config('sharemessage.settings')->get('message_enforcement')) {
-      $sharemessage->settings['enforce_usage'] = $sharemessage->enforce_usage;
-      unset($sharemessage->enforce_usage);
-    }
+//    if (\Drupal::config('sharemessage.addthis')->get('message_enforcement')) {
+//      $sharemessage->settings['enforce_usage'] = $sharemessage->enforce_usage;
+//      unset($sharemessage->enforce_usage);
+//    }
     return $sharemessage;
   }
 
 
-    /**
-   * Overrides Drupal\Core\Entity\EntityFormController::save().
+  /**
+   * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
+    /** @var ShareMessage $sharemessage */
     $sharemessage = $this->entity;
     $status = $sharemessage->save();
 
     if ($status == SAVED_UPDATED) {
       drupal_set_message(t('ShareMessage %label has been updated.', array('%label' => $sharemessage->label())));
-      \Drupal::logger('sharemessage')->notice('ShareMessage %label has been updated.', array('%label' => $sharemessage->label(), 'link' => $sharemessage->link($this->t('Edit'), 'edit-form')));
     }
     else {
       drupal_set_message(t('ShareMessage %label has been added.', array('%label' => $sharemessage->label())));
-      \Drupal::logger('sharemessage')->notice('ShareMessage %label has been added.', array('%label' => $sharemessage->label(), 'link' => $sharemessage->link($this->t('Edit'), 'edit-form')));
     }
     $form_state->setRedirect('sharemessage.sharemessage_list');
   }

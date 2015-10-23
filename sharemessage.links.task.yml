@@ -3,7 +3,7 @@ sharemessage.sharemessage_list:
   base_route: sharemessage.sharemessage_list
   title: 'List'
   weight: -10
-sharemessage.settings:
-  route_name: sharemessage.settings
+sharemessage.addthis.settings:
+  route_name: sharemessage.addthis.settings
   base_route: sharemessage.sharemessage_list
-  title: 'Settings'
+  title: 'AddThis settings'

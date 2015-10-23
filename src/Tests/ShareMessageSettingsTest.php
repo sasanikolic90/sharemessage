@@ -19,7 +19,7 @@ class ShareMessageSettingsTest extends ShareMessageTestBase {
   public function testShareMessageSettings() {
 
     // Step 1: Setup default settings.
-    $this->drupalGet('admin/config/services/sharemessage/settings');
+    $this->drupalGet('admin/config/services/sharemessage/addthis-settings');
     $default_settings = array(
       'default_services[]' => array(
         'facebook',
@@ -35,7 +35,7 @@ class ShareMessageSettingsTest extends ShareMessageTestBase {
     $sharemessage = array(
       'label' => 'ShareMessage Test Label',
       'id' => 'sharemessage_test_label',
-      'override_default_settings' => 1,
+      'settings[override_default_settings]' => 1,
       'settings[services][]' => array(
         'facebook',
       ),
@@ -64,7 +64,7 @@ class ShareMessageSettingsTest extends ShareMessageTestBase {
     // Step 4: Uncheck "Override default settings" checkbox.
     $this->drupalGet('admin/config/services/sharemessage/manage/' . $sharemessage['id']);
     $edit = array(
-      'override_default_settings' => FALSE,
+      'settings[override_default_settings]' => FALSE,
     );
     $this->drupalPostForm(NULL, $edit, t('Save'));
     $this->assertText(t('ShareMessage @label has been updated.', array('@label' => $sharemessage['label'])));
@@ -92,7 +92,7 @@ class ShareMessageSettingsTest extends ShareMessageTestBase {
     $sharemessage = [
       'label' => 'ShareMessage Test Label',
       'id' => 'sharemessage_test_label',
-      'override_default_settings' => 1,
+      'settings[override_default_settings]' => 1,
       'settings[services][]' => [
         'facebook',
       ],

@@ -6,6 +6,7 @@
 
 namespace Drupal\sharemessage\Entity;
 
+use Drupal\Component\Plugin\FallbackPluginManagerInterface;
 use Drupal\Component\Render\PlainTextOutput;
 use Drupal\Core\Config\Entity\ConfigEntityBase;
 use Drupal\Core\Url;
@@ -33,7 +34,6 @@ use Drupal\Core\Url;
  *   config_export = {
  *     "id",
  *     "label",
- *     "override_default_settings",
  *     "title",
  *     "message_long",
  *     "message_short",
@@ -41,6 +41,8 @@ use Drupal\Core\Url;
  *     "fallback_image",
  *     "video_url",
  *     "share_url",
+ *     "plugin",
+ *     "enforce_usage",
  *     "settings",
  *   },
  *   links = {
@@ -66,11 +68,11 @@ class ShareMessage extends ConfigEntityBase {
   public $label;
 
   /**
-   * The flag for default overrides of the sharemessage.
+   * The flag for enforcing the usage of the sharemessage.
    *
    * @var string
    */
-  public $override_default_settings;
+  public $enforce_usage;
 
   /**
    * The settings of the sharemessage.
@@ -129,6 +131,13 @@ class ShareMessage extends ConfigEntityBase {
   public $share_url;
 
   /**
+   * Share plugin ID.
+   *
+   * @var string
+   */
+  protected $plugin;
+
+  /**
    * {@inheritdoc}
    */
   public function setLabel($label) {
@@ -157,6 +166,59 @@ class ShareMessage extends ConfigEntityBase {
   public function setStatus($label) {
     $this->set('label', $label);
     return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getPlugin() {
+    return \Drupal::service('plugin.manager.sharemessage.share')->createInstance($this->plugin, ['sharemessage' => $this]);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getPluginId() {
+    return $this->plugin;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setPluginID($plugin_id) {
+    $this->plugin = $plugin_id;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function hasPlugin() {
+    if (!empty($this->plugin) && \Drupal::service('plugin.manager.sharemessage.share')->hasDefinition($this->plugin)) {
+      return TRUE;
+    }
+    return FALSE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getPluginDefinition() {
+    return $this->getPlugin()->getPluginDefinition();
+  }
+
+  /**
+   * Gets the default settings.
+   *
+   * @param string $key
+   *    Settings key.
+   *
+   * @return mixed
+   *    Returns default settings.
+   */
+  public function getSetting($key) {
+    if (!empty($this->settings[$key])) {
+      return $this->settings[$key];
+    }
   }
 
   /**
@@ -238,7 +300,7 @@ class ShareMessage extends ConfigEntityBase {
         '#tag' => 'meta',
         '#attributes' => array(
           'property' => 'og:video:width',
-          'content' => \Drupal::config('sharemessage.settings')->get('shared_video_width'),
+          'content' => \Drupal::config('sharemessage.addthis')->get('shared_video_width'),
         ),
       );
       $tags[] = array(
@@ -246,7 +308,7 @@ class ShareMessage extends ConfigEntityBase {
         '#tag' => 'meta',
         '#attributes' => array(
           'property' => 'og:video:height',
-          'content' => \Drupal::config('sharemessage.settings')->get('shared_video_height'),
+          'content' => \Drupal::config('sharemessage.addthis')->get('shared_video_height'),
         ),
       );
       $tags[] = array(
@@ -325,7 +387,7 @@ class ShareMessage extends ConfigEntityBase {
    */
   public function getUrl($context) {
     $options = array('absolute' => TRUE);
-    if (!empty($this->settings['enforce_usage'])) {
+    if ($this->enforce_usage) {
       $options['query'] = array('smid' => $this->id);
     }
     $uri = $this->getTokenizedField($this->share_url, $context, Url::fromRoute('<current>')->getInternalPath());

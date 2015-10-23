@@ -1,6 +1,6 @@
 /**
  * @file
- * Ensures that ShareMessage is visible in dialogs and other ajax elements.
+ * Ensures that AddThis is visible in dialogs and other ajax elements.
  */
 
 (function ($, Drupal) {
@@ -23,7 +23,7 @@
    *
    * @type {Drupal~behavior}
    */
-  Drupal.behaviors.sharemessage = {
+  Drupal.behaviors.addthis = {
     attach: function (context) {
       var $sharemessageElements = $(context).find('.addthis_toolbox');
 

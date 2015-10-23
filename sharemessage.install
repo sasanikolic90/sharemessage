@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @file
+ * Update function for the sharemessage module.
+ */
+
+/**
+ * Update override default settings and set the addthis plugin.
+ */
+function sharemessage_update_8001() {
+  $config_factory = \Drupal::configFactory();
+  foreach ($config_factory->listAll('sharemessage.settings') as $name) {
+    $config = $config_factory->getEditable($name);
+    $override_default_settings = $config->get('override_default_settings');
+    $config->clear('override_default_settings');
+    $config->set('settings.override_default_settings', $override_default_settings);
+    $config->set('plugin', 'addthis');
+    $config->save();
+  }
+  $config_factory->rename('sharemessage.settings', 'sharemessage.addthis');
+}
+
+/**
+ * @} End of "addtogroup updates-8.0.0-beta".
+ */

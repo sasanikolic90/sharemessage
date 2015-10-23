@@ -11,5 +11,6 @@ image_url: ''
 fallback_image: ''
 video_url: ''
 share_url: ''
-settings:
-  enforce_usage: false
+plugin: addthis
+enforce_usage: false
+settings: {}

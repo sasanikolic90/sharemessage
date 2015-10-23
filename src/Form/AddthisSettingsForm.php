@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains \Drupal\sharemessage\Form\SettingsForm.
+ * Contains \Drupal\sharemessage\Form\AddthisSettingsForm.
  */
 
 namespace Drupal\sharemessage\Form;
@@ -15,14 +15,14 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Defines a form that configures ShareMessage settings.
  */
-class SettingsForm extends ConfigFormBase {
+class AddthisSettingsForm extends ConfigFormBase {
 
   /**
    * {@inheritdoc}
    */
   protected function getEditableConfigNames() {
     return [
-      'sharemessage.settings',
+      'sharemessage.addthis',
     ];
   }
 
@@ -38,7 +38,7 @@ class SettingsForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state, Request $request = NULL) {
 
-    $config = $this->config('sharemessage.settings');
+    $config = $this->config('sharemessage.addthis');
 
     $form['addthis_profile_id'] = array(
       '#title' => t('AddThis Profile ID'),
@@ -122,7 +122,7 @@ class SettingsForm extends ConfigFormBase {
     // If the profile id changes then we need to rebuild the library cache.
     Cache::invalidateTags(['library_info']);
 
-    $this->config('sharemessage.settings')
+    $this->config('sharemessage.addthis')
       ->set('addthis_profile_id', $form_state->getValue('addthis_profile_id'))
       ->set('services', $form_state->getValue('default_services'))
       ->set('additional_services', $form_state->getValue('default_additional_services'))

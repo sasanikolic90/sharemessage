@@ -7,6 +7,7 @@
 namespace Drupal\sharemessage\Tests;
 
 use Drupal\Core\Url;
+use Drupal\sharemessage\Entity\ShareMessage;
 
 /**
  * Main sharemessage workflow through the admin UI.
@@ -68,9 +69,10 @@ class ShareMessageWorkflowTest extends ShareMessageTestBase {
     );
     $this->drupalPostForm(NULL, $edit_2, t('Save'));
 
+    /** @var ShareMessage $sharemessage */
     $sharemessage = entity_load('sharemessage', 'sharemessage_test_label2');
     // Check if the option was saved as expected.
-    $this->assertEqual(!empty($sharemessage->settings['enforce_usage']), TRUE, 'Enforce setting was saved on the entity.');
+    $this->assertEqual($sharemessage->enforce_usage, TRUE, 'Enforce setting was saved on the entity.');
     $this->drupalGet('sharemessage-test/sharemessage_test_label', array('query' => array('smid' => 'sharemessage_test_label2')));
 
     // Check if the og:description tag gets rendered correctly.
@@ -79,6 +81,8 @@ class ShareMessageWorkflowTest extends ShareMessageTestBase {
     // Check if the og:url tag gets rendered correctly.
     $url = Url::fromUri($edit['share_url'], array('query' => array('smid' => 'sharemessage_test_label2')))->toString();
     $meta_url = '<meta property="og:url" content="' . $url . '" />';
+    debug($url);
+    debug($meta_url);
     $this->assertRaw($meta_url, 'og:url has correct query string.');
     $meta_url = '<meta property="og:url" content="' . $edit['share_url'] . '" />';
     $this->assertNoRaw($meta_url, 'Suppressing og:url meta tag for overridden sharemessage.');
@@ -87,7 +91,7 @@ class ShareMessageWorkflowTest extends ShareMessageTestBase {
     $this->assertRaw('addthis:description="' . $edit['message_long'] . '"', 'Overridden sharemessage has og data as attributes.');
 
     // Disable enforcement of overrides in the global settings.
-    $this->config('sharemessage.settings')->set('message_enforcement', FALSE)->save();
+    $this->config('sharemessage.addthis')->set('message_enforcement', FALSE)->save();
     $this->drupalGet('sharemessage-test/sharemessage_test_label', array('query' => array('smid' => 'sharemessage_test_label2')));
 
     // Check if the og:description tag gets rendered correctly.

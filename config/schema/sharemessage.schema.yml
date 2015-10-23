@@ -1,5 +1,5 @@
 
-sharemessage.settings:
+sharemessage.addthis:
   type: config_object
   mapping:
     addthis_profile_id:
@@ -43,9 +43,6 @@ sharemessage.sharemessage.*:
     label:
       type: label
       label: 'Label'
-    override_default_settings:
-      type: boolean
-      label: 'Override default settings'
     title:
       type: label
       label: 'Title'
@@ -67,10 +64,19 @@ sharemessage.sharemessage.*:
     share_url:
       type: string
       label: 'Share URL'
+    plugin:
+      type: string
+      label: 'Plugin'
+    enforce_usage:
+      type: boolean
+      label: Enforce usage through URL
     settings:
       type: mapping
       label: 'Settings'
       mapping:
+        override_default_settings:
+          type: boolean
+          label: 'Override default settings'
         additional_services:
           type: boolean
           label: Show additional services
@@ -80,9 +86,6 @@ sharemessage.sharemessage.*:
         icon_style:
           type: string
           label: Icon style
-        enforce_usage:
-          type: boolean
-          label: Enforce usage through URL
         services:
           type: sequence
           label: Enabled services
