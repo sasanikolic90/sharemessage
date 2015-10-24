@@ -24,7 +24,7 @@ function sharemessage_schema() {
         'length' => 128,
         'not null' => FALSE,
         'default' => '',
-        'description' => 'Message Lable.',
+        'description' => 'Message Label.',
       ),
       'bundle' => array(
         'type' => 'varchar',
@@ -249,7 +249,7 @@ function sharemessage_install() {
       'field_name' => 'sharemessage_video_url',
       'entity_type' => 'sharemessage',
       'label' => 'Video URL',
-      'description' => 'Enter the video URL that will get shared. If a video is configured, the shared the image will only get shared if the video',
+      'description' => 'The image URL that will be used for sharing. If a video URL is set, the image will be used as a thumbnail for the video.',
       'bundle' => 'sharemessage',
       'widget' => array(
         'type' => 'text_textfield',
@@ -320,7 +320,7 @@ function sharemessage_update_7001() {
       'field_name' => 'sharemessage_video_url',
       'entity_type' => 'sharemessage',
       'label' => 'Video URL',
-      'description' => 'Enter the video URL that will get shared. If a video is configured, the shared the image will only get shared if the video is',
+      'description' => 'The image URL that will be used for sharing. If a video URL is set, the image will be used as a thumbnail for the video.',
       'bundle' => 'sharemessage',
       'widget' => array(
         'type' => 'text_textfield',

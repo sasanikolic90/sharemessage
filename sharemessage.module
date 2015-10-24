@@ -487,7 +487,7 @@ function sharemessage_addthis_settings($form, $form_state) {
   );
 
   $form['sharemessage_shared_video_width'] = array(
-    '#title' => t('Video height'),
+    '#title' => t('Video width'),
     '#description' => t('The width of the player when sharing a video.'),
     '#type' => 'textfield',
     '#default_value' => variable_get('sharemessage_shared_video_width', 360),
