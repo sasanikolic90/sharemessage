@@ -6,9 +6,10 @@
 
 namespace Drupal\sharemessage\Entity;
 
-use Drupal\Component\Utility\PlainTextOutput;
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Config\Entity\ConfigEntityBase;
 use Drupal\Core\Url;
+
 
 /**
  * Entity class for the Share Message entity.
@@ -309,7 +310,7 @@ class ShareMessage extends ConfigEntityBase {
    */
   public function getTokenizedField($property_value, $context, $default = '') {
     if ($property_value) {
-      return strip_tags(PlainTextOutput::renderFromHtml(\Drupal::token()->replace($property_value, $context, array('clear' => TRUE))));
+      return Html::decodeEntities(strip_tags((string) \Drupal::token()->replace($property_value, $context, array('clear' => TRUE))));
     }
     return $default;
   }
